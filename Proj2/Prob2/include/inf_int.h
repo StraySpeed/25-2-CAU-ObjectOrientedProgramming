@@ -29,11 +29,20 @@ public :
     friend bool operator>(const inf_int& , const inf_int&);
     friend bool operator<(const inf_int& , const inf_int&);
 
+    // 더하기, 빼기 연산자
     friend inf_int operator+(const inf_int& , const inf_int&);
     friend inf_int operator-(const inf_int& , const inf_int&);
-    friend inf_int operator*(const inf_int& , const inf_int&);
-    // friend inf_int operator/(const inf_int& , const inf_int&); // not required
 
+    // 곱하기, pow 연산자
+    // pow(2, 3) == 2^3 == 8
+    friend inf_int operator*(const inf_int& , const inf_int&);
+    static inf_int pow(const inf_int&, const inf_int&);
+
+    // 나누기, 나머지 연산자
+    friend inf_int operator/(const inf_int& , const inf_int&);
+    friend inf_int operator%(const inf_int& , const inf_int&);
+
+    // 출력
     friend ostream& operator<<(ostream& , const inf_int&);
     // friend istream& operator>>(istream& , inf_int&);    // not required
 };
