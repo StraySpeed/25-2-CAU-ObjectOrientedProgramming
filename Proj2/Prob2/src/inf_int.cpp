@@ -14,6 +14,7 @@ inf_int::inf_int() {
 
 inf_int::inf_int(int value) {
     std::string t = std::to_string(value);
+    std::reverse(t.begin(), t.end());
     inf_int::digits = new char[t.length() + 1];
     strcpy(inf_int::digits, t.c_str());
     inf_int::digits[t.length()] = '\0';
@@ -56,7 +57,7 @@ inf_int::~inf_int() {
 }
 
 // 교수님 Add 함수
-inf_int::Add(const char num, const unsigned int index) {
+void inf_int::Add(const char num, const unsigned int index) {
     if (length < index) {
         unsigned newLen = index;
         char* nd = new char[newLen + 1];
