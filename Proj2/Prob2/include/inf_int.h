@@ -45,6 +45,9 @@ public :
     // 출력
     friend ostream& operator<<(ostream& , const inf_int&);
     // friend istream& operator>>(istream& , inf_int&);    // not required
+
+	// 제곱근
+    friend inf_int sqrt(const inf_int&);
 };
 
 #endif
