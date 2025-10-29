@@ -1,10 +1,12 @@
-#include <application.h>
 #include <iostream>
 #include <string>
-
+#include "application.h"
+#include "precedence.h"
+#include "calculator.h"
 
 Application::Application() {
     isExit = false;
+    calculator = Calculator();
 }
 
 void Application::mainloop() {
@@ -70,12 +72,13 @@ void Application::print_main_menu() {
 
 void Application::print_calculate_menu() {
     string input;
-    cout << "Enter expressions. : ";
+    cout << "Enter expressions : ";
     getline(cin, input);
     // calculate
+    cout << "Calculate Result = " << calculator.calculate(Precedence::postfix(input)) << endl << endl;
 }
 
 void Application::print_prev_value() {
     // getPrev();
-    cout << "Previous Value is " << endl;
+    cout << "Previous Value is " << calculator.getPrev() << endl << endl;
 }
