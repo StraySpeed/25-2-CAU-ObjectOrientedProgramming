@@ -9,17 +9,23 @@ prob2/
 ├─ src/                  # 소스 파일(.cpp)
 │   ├─ application.cpp
 │   ├─ calculator.cpp
+│   ├─ devide.cpp
 │   ├─ inf_int.cpp
 │   ├─ precedence.cpp
+│   ├─ sqrt.cpp
 │
-├─ pysrc/                  # Python 소스 파일(.pyd)
+├─ pysrc/                # Python 소스 파일(.pyd)
 │   ├─ calculator.pyd
 │
+├─ wrapper.py	# C++ to Python wrapper
 ├─ setup.py	# C++ to Python
 ├─ main.cpp	# main() 포함
 ├─ main.py	# Python GUI
 ├─ file1.txt
 ├─ Makefile
+├─ requirements.txt
+├─ README.txt
+
 
 # Basic Info
 ## 1. C++
@@ -39,7 +45,7 @@ pybind11
 # C++
 # Compile & Run Command
 >>> make
->>> .\prob2.exe file1.txt
+>>> .\prob2.exe
 
 ------
 # Python

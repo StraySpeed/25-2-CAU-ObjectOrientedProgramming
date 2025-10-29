@@ -94,7 +94,7 @@ PYBIND11_MODULE(calculator, m) {
 
         // 멤버 함수 바인딩
         .def("calculate", &Calculator::calculate,
-             "Calculates the result of an infix expression string.", py::arg("expr"))
+             "Calculates the result of an postfix expression string.", py::arg("expr"))
 
         // getPrev() 함수를 'prev'라는 읽기 전용 속성으로 바인딩
         .def_property_readonly("prev", &Calculator::getPrev,

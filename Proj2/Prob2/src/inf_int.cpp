@@ -299,7 +299,7 @@ inf_int operator-(const inf_int& a, const inf_int& b)
 		else
 		{
 			c = b;
-			for (i = 0; i < b.length; i++)
+			for (i = 0; i < a.length; i++)
 			{
 				c.SUB(a.digits[i], i);
 			}
