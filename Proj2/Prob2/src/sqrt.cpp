@@ -1,24 +1,24 @@
 #include "inf_int.h"
 using namespace std;
 
-// inf_int¿¡ sqrt() Ãß°¡ÇÔ
-// =, ==, <, <=, +, -, *, / °¡ ±¸ÇöµÇ¾ú´Ù°í °¡Á¤
+// inf_intì— sqrt() ì¶”ê°€í•¨
+// =, ==, <, <=, +, -, *, / ê°€ êµ¬í˜„ë˜ì—ˆë‹¤ê³  ê°€ì •
 inf_int sqrt(const inf_int& value) {
-	// À½¼öÀÇ Á¦°ö±Ù
+	// ìŒìˆ˜ì˜ ì œê³±ê·¼
 	if (value < inf_int(0)) {
-		// º¹¼Ò¼öµµ ÇÏ·Á°í Çß´Âµ¥, »ý°¢ÇØº¸´Ï inf_int°¡ Á¤¼öÇüÀÌ¾î¼­ ¾ÈÇØµµ µÉ °Å °°À½
+		// ë³µì†Œìˆ˜ë„ í•˜ë ¤ê³  í–ˆëŠ”ë°, ìƒê°í•´ë³´ë‹ˆ inf_intê°€ ì •ìˆ˜í˜•ì´ì–´ì„œ ì•ˆí•´ë„ ë  ê±° ê°™ìŒ
 		// value.imaginary = true;
-		// ¿¹¿Ü Ã³¸®, À½¼öÀÇ Á¦°ö±Ù Á¤ÀÇ ¾È ÇÒ°ÅÀÓ
+		// ì˜ˆì™¸ ì²˜ë¦¬, ìŒìˆ˜ì˜ ì œê³±ê·¼ ì •ì˜ ì•ˆ í• ê±°ìž„
 		throw invalid_argument("Sqrt of negative number is not allowed");
 	}
-	// 0°ú 1ÀÇ Á¦°ö±ÙÀº ÀÚ±â ÀÚ½Å
+	// 0ê³¼ 1ì˜ ì œê³±ê·¼ì€ ìžê¸° ìžì‹ 
 	if (value == inf_int(0) || value == inf_int(1)) {
 		return value;
 	}
 	// Binary Search
-	// 1ºÎÅÍ value±îÁöÀÇ ¹üÀ§¿¡¼­ valueÀÇ Á¦°ö±Ù Ã£±â (¾î¶² ¼ö¸¦ Á¦°öÇßÀ» ¶§ value°¡ µÇ´Â ¼ö Ã£±â)
-	// return mid: mid*mid == value (Á¤È®ÇÑ °ªÀ» Ã£¾ÒÀ» ¶§)
-	// return result: mid*mid < valueÀÎ °¡Àå Å« mid (Á¤È®ÇÑ °ªÀº ¾Æ´Ï°í, ¼Ò¼öÁ¡ ¹ö¸²)
+	// 1ë¶€í„° valueê¹Œì§€ì˜ ë²”ìœ„ì—ì„œ valueì˜ ì œê³±ê·¼ ì°¾ê¸° (ì–´ë–¤ ìˆ˜ë¥¼ ì œê³±í–ˆì„ ë•Œ valueê°€ ë˜ëŠ” ìˆ˜ ì°¾ê¸°)
+	// return mid: mid*mid == value (ì •í™•í•œ ê°’ì„ ì°¾ì•˜ì„ ë•Œ)
+	// return result: mid*mid < valueì¸ ê°€ìž¥ í° mid (ì •í™•í•œ ê°’ì€ ì•„ë‹ˆê³ , ì†Œìˆ˜ì  ë²„ë¦¼)
 	inf_int left(1), right = value, mid, result;
 
 	while (left <= right) {
