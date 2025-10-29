@@ -276,7 +276,7 @@ int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면
 	else if (a.length < b.length) res = -1;
 	else
 	{
-		for (int i = 0; i < a.length; i++)
+		for (unsigned int i = 0; i < a.length; i++)
 		{
 			if (a.digits[i] > b.digits[i]) res = 1;
 			else if (a.digits[i] == b.digits[i]) res = 0;
@@ -304,7 +304,7 @@ inf_int operator-(const inf_int& a, const inf_int& b)
 		else
 		{
 			c = b;
-			for (i = 0; i < a.length; i++)
+			for (i = 0; i < a.length; i++) // b.length로 되어 있어서 오류
 			{
 				c.SUB(a.digits[i], i);
 			}
@@ -347,8 +347,8 @@ void inf_int::SUB(const char num, const unsigned int index)
 	{
 		this->digits[index] = this->digits[index] - num + 10 + '0';
 		// 빼지는 수가 더 큰 상황에서 내림
-		int i = 1;
-		for (unsigned i = 1; i < this->length; i++)
+		unsigned int i = 1;
+		for (i = 1; i < this->length; i++)
 		{
 			if (this->digits[index + i] != '0') break;
 			this->digits[index + i] = '9';
