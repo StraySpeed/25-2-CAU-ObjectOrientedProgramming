@@ -37,7 +37,6 @@ public :
     void SUB(const char num, const unsigned int index);
 
     // 곱하기, pow 연산자
-    // pow(2, 3) == 2^3 == 8
     friend inf_int operator*(const inf_int& , const inf_int&);
 
     // 나누기, 나머지 연산자
