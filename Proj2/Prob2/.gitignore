@@ -44,4 +44,5 @@ obj/
 # Per-user settings
 ## VSCode json file
 .vscode/
-others/
+pysrc/
+build/
