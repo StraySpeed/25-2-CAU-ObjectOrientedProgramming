@@ -45,6 +45,15 @@ public :
     // 출력
     friend ostream& operator<<(ostream& , const inf_int&);
     // friend istream& operator>>(istream& , inf_int&);    // not required
+
+    // 더하기 (교수님 코드)
+    void Add(const char num, const unsigned int index);
+
+    // pow시 사용하는 함수
+    friend bool is_zero(const inf_int& e); // 지수가 0인지 체크
+    friend bool is_even(const inf_int& e); // 지수가 짝수인지 체크
+    friend void div2(inf_int& e);          // 지수를 2로 나누는 함수
+    friend inf_int pow(inf_int base, inf_int exp); // 거듭제곱 함수
 };
 
 #endif
