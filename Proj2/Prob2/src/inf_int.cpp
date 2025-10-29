@@ -109,7 +109,7 @@ bool operator<(const inf_int& a, const inf_int& b)
 int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면 false
 {
 	int res = 0;
-	if (a.length > b.length) res = 1; // 자릿수가 다를 때 절댓값 비교 구문 추가
+	if (a.length > b.length) res = 1; 
 	else if (a.length < b.length) res = -1;
 	else
 	{
