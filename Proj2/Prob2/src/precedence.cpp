@@ -12,6 +12,8 @@ Precedence::precedence Precedence::getToken(std::string symbol) {
     else if (symbol == "*") return TIMES;
     else if (symbol == "%") return MOD;
     else if (symbol == ";") return EOS;
+    else if (symbol == "^") return POW;
+    else if (symbol == "SQRT") return SQRT;
     else return OPERAND;
 }
 

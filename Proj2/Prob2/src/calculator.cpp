@@ -53,6 +53,18 @@ inf_int Calculator::calculate(std::string expr) {
         else if (symbol == "PREV") {
             s.push(prev);
         }
+        else if (symbol == "^") {
+            a = inf_int(s.top());
+            s.pop();
+            b = inf_int(s.top());
+            s.pop();
+            s.push(pow(b, a));              
+        }
+        else if (symbol == "SQRT") {
+            a = inf_int(s.top());
+            s.pop();
+            s.push(sqrt(a));
+        }
         else {
             s.push(inf_int(symbol.c_str()));
         }

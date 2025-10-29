@@ -53,4 +53,7 @@ public :
     friend void div2(inf_int& e);          // 지수를 2로 나누는 함수
     friend inf_int pow(inf_int base, inf_int exp); // 거듭제곱 함수
 };
+
+// 제곱근
+inf_int sqrt(const inf_int&);
 #endif

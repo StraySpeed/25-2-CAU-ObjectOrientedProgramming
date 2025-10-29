@@ -21,7 +21,7 @@ inf_int sqrt(const inf_int& value) {
 	// return result: mid*mid < value인 가장 큰 mid (정확한 값은 아니고, 소수점 버림)
 	inf_int left(1), right = value, mid, result;
 
-	while (left <= right) {
+	while (!(left > right)) {
 		mid = (left + right) / inf_int(2);
 		inf_int midSquare = mid * mid;
 		if (midSquare == value) {
