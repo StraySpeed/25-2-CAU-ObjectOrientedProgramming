@@ -20,7 +20,7 @@ inf_int Calculator::calculate(std::string expr) {
             s.pop();
             b = inf_int(s.top());
             s.pop();
-            s.push(a + b);
+            s.push(b + a);
         }
         else if (symbol == "-") {
             a = inf_int(s.top());
@@ -34,21 +34,21 @@ inf_int Calculator::calculate(std::string expr) {
             s.pop();
             b = inf_int(s.top());
             s.pop();
-            //s.push(a / b);            
+            s.push(b / a);            
         }
         else if (symbol == "*") {
             a = inf_int(s.top());
             s.pop();
             b = inf_int(s.top());
             s.pop();
-            s.push(a * b);            
+            s.push(b * a);            
         }
         else if (symbol == "%") {
             a = inf_int(s.top());
             s.pop();
             b = inf_int(s.top());
             s.pop();
-            //s.push(a % b);            
+            s.push(b % a);            
         }
         else if (symbol == "PREV") {
             s.push(prev);
