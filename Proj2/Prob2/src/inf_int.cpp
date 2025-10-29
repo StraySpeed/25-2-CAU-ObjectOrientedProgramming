@@ -109,11 +109,16 @@ bool operator<(const inf_int& a, const inf_int& b)
 int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면 false
 {
 	int res = 0;
-	for (int i = 0; i < a.length; i++)
+	if (a.length > b.length) res = 1;
+	else if (a.length < b.length) res = -1;
+	else
 	{
-		if (a.digits[i] > b.digits[i]) res = 1;
-		else if (a.digits[i] == b.digits[i]) res = 0;
-		else res = -1;
+		for (int i = 0; i < a.length; i++)
+		{
+			if (a.digits[i] > b.digits[i]) res = 1;
+			else if (a.digits[i] == b.digits[i]) res = 0;
+			else res = -1;
+		}
 	}
 	return res;
 }
@@ -162,7 +167,7 @@ inf_int operator-(const inf_int& a, const inf_int& b)
 		else
 		{
 			c = b;
-			for (i = 0; i < b.length; i++)
+			for (i = 0; i < a.length; i++)
 			{
 				c.SUB(a.digits[i], i);
 			}
