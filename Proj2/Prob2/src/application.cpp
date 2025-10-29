@@ -75,11 +75,10 @@ void Application::print_calculate_menu() {
     cout << "Enter expressions : ";
     getline(cin, input);
     // calculate
-    //cout << Precedence::prefix(input) << endl;
-    cout << "Calculate Result = " << calculator.calculate(input);
+    cout << "Calculate Result = " << calculator.calculate(Precedence::postfix(input)) << endl << endl;
 }
 
 void Application::print_prev_value() {
     // getPrev();
-    cout << "Previous Value is " << calculator.getPrev() << endl;
+    cout << "Previous Value is " << calculator.getPrev() << endl << endl;
 }

@@ -2,24 +2,31 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-
+#include <algorithm>
 
 inf_int::inf_int() {
     inf_int::digits = new char[2];
     inf_int::digits[0] = '0';
     inf_int::digits[1] = '\0';    
-    inf_int::length = strlen(inf_int::digits) - 1;
+    inf_int::length = strlen(inf_int::digits);
     inf_int::thesign = true;
 }
 
 inf_int::inf_int(int value) {
     std::string t = std::to_string(value);
+    // 부호 음수면 부호 제거하고 sign을 false로
+    if (t.substr(0, 1) == "-") {
+        inf_int::thesign = false;
+        t = t.substr(1);
+    }
+    else {
+        inf_int::thesign = true;
+    }
     std::reverse(t.begin(), t.end());
     inf_int::digits = new char[t.length() + 1];
     strcpy(inf_int::digits, t.c_str());
     inf_int::digits[t.length()] = '\0';
-    inf_int::length = strlen(inf_int::digits) - 1;
-    inf_int::thesign = true;
+    inf_int::length = strlen(inf_int::digits);
 }
 
 // 기존 코드 : 1234 입력시 1234로 저장
@@ -214,7 +221,7 @@ inf_int& inf_int::operator=(const inf_int& a)
     }
     this->digits = new char[a.length + 1];
 
-    for (int i = 0; i < a.length; i++)
+    for (unsigned int i = 0; i < a.length; i++)
         this->digits[i] = a.digits[i];
     this->length = a.length;
     this->thesign = a.thesign;
@@ -265,7 +272,7 @@ bool operator<(const inf_int& a, const inf_int& b)
 int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면 false
 {
 	int res = 0;
-	for (int i = 0; i < a.length; i++)
+	for (unsigned int i = 0; i < a.length; i++)
 	{
 		if (a.digits[i] > b.digits[i]) res = 1;
 		else if (a.digits[i] == b.digits[i]) res = 0;
@@ -274,40 +281,14 @@ int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면
 	return res;
 }
 
-inf_int operator+(const inf_int& a, const inf_int& b)
-{
-	inf_int c;
-	unsigned int i;
-
-	if (a.thesign == b.thesign) {	// 이항의 부호가 같을 경우 + 연산자로 연산
-		for (i = 0; i < a.length; i++) {
-			c.Add(a.digits[i], i + 1);
-		}
-		for (i = 0; i < b.length; i++) {
-			c.Add(b.digits[i], i + 1);
-		}
-
-		c.thesign = a.thesign;
-
-		return c;
-	}
-	else {	// 이항의 부호가 다를 경우 - 연산자로 연산
-		c = b;
-		c.thesign = a.thesign;
-
-		return a - c;
-	}
-}
-
 inf_int operator-(const inf_int& a, const inf_int& b)
 {
 	inf_int c;
 	unsigned int i;
-
 	if (a.thesign == b.thesign) {	// 이항의 부호가 같을 경우 + 연산자로 연산
 		if (absCompare(a, b) == 0) c = 0;
 		else if (absCompare(a, b) == 1)
-		{
+		{   
 			c = a;
 			for (i = 0; i < b.length; i++)
 			{
@@ -353,34 +334,6 @@ ostream& operator<<(ostream& out, const inf_int& a)
 	return out;
 }
 
-void inf_int::Add(const char num, const unsigned int index)	// a의 index 자리수에 n을 더한다. 0<=n<=9, ex) a가 391일때, Add(a, 2, 2)의 결과는 411
-{
-	if (this->length < index) {
-		this->digits = (char*)realloc(this->digits, index + 1);
-
-		if (this->digits == NULL) {		// 할당 실패 예외처리
-			cout << "Memory reallocation failed, the program will terminate." << endl;
-
-			exit(0);
-		}
-
-		this->length = index;					// 길이 지정
-		this->digits[this->length] = '\0';	// 널문자 삽입
-	}
-
-	if (this->digits[index - 1] < '0') {	// 연산 전에 '0'보다 작은 아스키값인 경우 0으로 채움. 쓰여지지 않았던 새로운 자리수일 경우 발생
-		this->digits[index - 1] = '0';
-	}
-
-	this->digits[index - 1] += num - '0';	// 값 연산
-
-
-	if (this->digits[index - 1] > '9') {	// 자리올림이 발생할 경우
-		this->digits[index - 1] -= 10;	// 현재 자릿수에서 (아스키값) 10을 빼고
-		Add('1', index + 1);			// 윗자리에 1을 더한다
-	}
-}
-
 void inf_int::SUB(const char num, const unsigned int index)
 {
 	if (this->digits[index] >= num)
@@ -390,7 +343,7 @@ void inf_int::SUB(const char num, const unsigned int index)
 		this->digits[index] = this->digits[index] - num + 10 + '0';
 		// 빼지는 수가 더 큰 상황에서 내림
 		int i = 1;
-		for (i = 1; i < this->length; i++)
+		for (unsigned i = 1; i < this->length; i++)
 		{
 			if (this->digits[index + i] != '0') break;
 			this->digits[index + i] = '9';

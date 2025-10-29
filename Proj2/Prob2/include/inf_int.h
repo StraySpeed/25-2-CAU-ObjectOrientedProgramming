@@ -41,15 +41,12 @@ public :
     friend inf_int operator*(const inf_int& , const inf_int&);
 
     // 나누기, 나머지 연산자
-    friend inf_int operator/(const inf_int& , const inf_int&);
-    friend inf_int operator%(const inf_int& , const inf_int&);
+    //friend inf_int operator/(const inf_int& , const inf_int&);
+    //friend inf_int operator%(const inf_int& , const inf_int&);
 
     // 출력
     friend ostream& operator<<(ostream& , const inf_int&);
     // friend istream& operator>>(istream& , inf_int&);    // not required
-
-    // 더하기 (교수님 코드)
-    void Add(const char num, const unsigned int index);
 
     // pow시 사용하는 함수
     friend bool is_zero(const inf_int& e); // 지수가 0인지 체크
