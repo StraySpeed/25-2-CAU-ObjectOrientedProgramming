@@ -6,18 +6,18 @@ using namespace std;
 
 inf_int operator/(const inf_int& a, const inf_int& b) {
 
-    // ¸ò, Àı´ñ°ª °è»êÀ» À§ÇÑ inf_int
+    // ëª«, ì ˆëŒ“ê°’ ê³„ì‚°ì„ ìœ„í•œ inf_int
     inf_int quotient;   
     inf_int compare1;
     inf_int compare2;
 
-    // ³ª´©¾îÁö´Â ¼ö¿Í ³ª´©´Â ¼ö ´ëÀÔ ¿¬»ê ÈÄ Àı´ñ°ª Ã³¸®
+    // ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ì™€ ë‚˜ëˆ„ëŠ” ìˆ˜ ëŒ€ì… ì—°ì‚° í›„ ì ˆëŒ“ê°’ ì²˜ë¦¬
     compare1.operator=(a);   
     compare1.thesign = true;
     compare2.operator=(b);
     compare2.thesign = true;
 
-    // ³ª´©´Â ¼ö°¡ Å©°Å³ª °°´Ù¸é Æ¯ÀÌ ÄÉÀÌ½º Ã³¸®
+    // ë‚˜ëˆ„ëŠ” ìˆ˜ê°€ í¬ê±°ë‚˜ ê°™ë‹¤ë©´ íŠ¹ì´ ì¼€ì´ìŠ¤ ì²˜ë¦¬
     if (operator<(compare1, compare2)) { 
         strcpy(quotient.digits,"0");
         quotient.length = 1;
@@ -26,20 +26,20 @@ inf_int operator/(const inf_int& a, const inf_int& b) {
         strcpy(quotient.digits, "1");
         quotient.length = 1;
     }
-    // ³ª´©¾îÁö´Â ¼ö°¡ ´õ Å« °æ¿ì
+    // ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ê°€ ë” í° ê²½ìš°
     else {    
 
-        // ³ª´©´Â ¼ö·Î °è¼Ó »©¸é¼­ ¸ò¿¡ 1À» ´õÇÒ inf_int
+        // ë‚˜ëˆ„ëŠ” ìˆ˜ë¡œ ê³„ì† ë¹¼ë©´ì„œ ëª«ì— 1ì„ ë”í•  inf_int
         inf_int one;
         strcpy(one.digits, "1");
         one.length = 1;
         one.thesign = true;
 
-        // quotient ÃÊ±â°ª ¼³Á¤
+        // quotient ì´ˆê¸°ê°’ ì„¤ì •
         strcpy(quotient.digits, "0");
         quotient.length = 1;
 
-        // °è¼Ó »©°¡¸ç ¾ğÁ¨°¡´Â ³ª´©´Â ¼öº¸´Ù ÀÛ¾ÆÁú ¶§±îÁö ¸ò +1 / ±×‹š »ı±ä ÀÛ¾ÆÁø ¼ö´Â ³ª¸ÓÁö
+        // ê³„ì† ë¹¼ê°€ë©° ì–¸ì  ê°€ëŠ” ë‚˜ëˆ„ëŠ” ìˆ˜ë³´ë‹¤ ì‘ì•„ì§ˆ ë•Œê¹Œì§€ ëª« +1 / ê·¸ë–„ ìƒê¸´ ì‘ì•„ì§„ ìˆ˜ëŠ” ë‚˜ë¨¸ì§€
         while (!operator<(compare1, compare2)) {
             compare1.operator=(operator-(compare1,compare2));
             quotient.operator=(operator+(quotient, one));
@@ -47,8 +47,8 @@ inf_int operator/(const inf_int& a, const inf_int& b) {
 
     }
 
-    // À§ ¿¬»êÀ¸·Î °è»êµÈ ¸ò ±æÀÌ
-    // ³ª´©´Â ¼ö¿Í ³ª´©¾îÁö´Â ¼ö ºÎÈ£¿¡ µû¶ó ¸ò ºÎÈ£ °áÁ¤
+    // ìœ„ ì—°ì‚°ìœ¼ë¡œ ê³„ì‚°ëœ ëª« ê¸¸ì´
+    // ë‚˜ëˆ„ëŠ” ìˆ˜ì™€ ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ ë¶€í˜¸ì— ë”°ë¼ ëª« ë¶€í˜¸ ê²°ì •
     quotient.length = strlen(quotient.digits);
     quotient.thesign = (a.thesign == b.thesign) ? true : false;
 
@@ -57,18 +57,18 @@ inf_int operator/(const inf_int& a, const inf_int& b) {
 
 inf_int operator%(const inf_int& a, const inf_int& b) {
 
-    // ³ª¸ÓÁö, Àı´ñ°ª °è»êÀ» À§ÇÑ inf_int
+    // ë‚˜ë¨¸ì§€, ì ˆëŒ“ê°’ ê³„ì‚°ì„ ìœ„í•œ inf_int
     inf_int remainder;
     inf_int compare1;
     inf_int compare2;
 
-    // ³ª´©¾îÁö´Â ¼ö¿Í ³ª´©´Â ¼ö ´ëÀÔ ¿¬»ê ÈÄ Àı´ñ°ª Ã³¸®
+    // ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ì™€ ë‚˜ëˆ„ëŠ” ìˆ˜ ëŒ€ì… ì—°ì‚° í›„ ì ˆëŒ“ê°’ ì²˜ë¦¬
     compare1.operator=(a);
     compare1.thesign = true;
     compare2.operator=(b);
     compare2.thesign = true;
 
-    // ³ª´©´Â ¼ö°¡ Å©°Å³ª °°´Ù¸é Æ¯ÀÌ ÄÉÀÌ½º Ã³¸®
+    // ë‚˜ëˆ„ëŠ” ìˆ˜ê°€ í¬ê±°ë‚˜ ê°™ë‹¤ë©´ íŠ¹ì´ ì¼€ì´ìŠ¤ ì²˜ë¦¬
     if (operator<(compare1, compare2)) {
         remainder.operator=(compare1);
     }
@@ -76,10 +76,10 @@ inf_int operator%(const inf_int& a, const inf_int& b) {
         strcpy(remainder.digits, "0");
         remainder.length = 1;
     }
-    // ³ª´©¾îÁö´Â ¼ö°¡ ´õ Å« °æ¿ì
+    // ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ê°€ ë” í° ê²½ìš°
     else {
 
-        // ³ª´©´Â ¼öº¸´Ù ÀÛ¾ÆÁú ¶§±îÁö °è¼Ó »©°¡¸ç ³ª¸ÓÁö ±¸ÇÏ±â
+        // ë‚˜ëˆ„ëŠ” ìˆ˜ë³´ë‹¤ ì‘ì•„ì§ˆ ë•Œê¹Œì§€ ê³„ì† ë¹¼ê°€ë©° ë‚˜ë¨¸ì§€ êµ¬í•˜ê¸°
         while (!operator<(compare1, compare2)) {
             compare1.operator=(operator-(compare1, compare2));
         }
@@ -87,7 +87,7 @@ inf_int operator%(const inf_int& a, const inf_int& b) {
 
     }
 
-    // ³ª¸ÓÁö ºÎÈ£´Â ³ª´©¾îÁö´Â ¼ö ºÎÈ£¸¦ µû¶ó°£´Ù
+    // ë‚˜ë¨¸ì§€ ë¶€í˜¸ëŠ” ë‚˜ëˆ„ì–´ì§€ëŠ” ìˆ˜ ë¶€í˜¸ë¥¼ ë”°ë¼ê°„ë‹¤
     remainder.thesign = a.thesign;
 
     return remainder;
