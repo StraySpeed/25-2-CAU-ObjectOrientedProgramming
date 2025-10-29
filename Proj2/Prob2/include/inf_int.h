@@ -28,10 +28,13 @@ public :
     friend bool operator!=(const inf_int& , const inf_int&);
     friend bool operator>(const inf_int& , const inf_int&);
     friend bool operator<(const inf_int& , const inf_int&);
+    friend int absCompare(const inf_int& a, const inf_int& b); // 절댓값 비교
 
     // 더하기, 빼기 연산자
     friend inf_int operator+(const inf_int& , const inf_int&);
     friend inf_int operator-(const inf_int& , const inf_int&);
+    void Add(const char num, const unsigned int index);
+    void SUB(const char num, const unsigned int index);
 
     // 곱하기, pow 연산자
     // pow(2, 3) == 2^3 == 8
