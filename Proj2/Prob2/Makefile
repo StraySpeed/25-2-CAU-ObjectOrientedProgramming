@@ -7,10 +7,12 @@ SRC_DIR = src
 INC_DIR = include
 OBJ_DIR = obj
 
-# src 디렉토리의 모든 .cpp 파일을 지정
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+# src 디렉토리의 모든 .cpp 파일 + main.cpp을 지정
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) main.cpp
 # obj 디렉토리의 모든 .o 파일을 지정
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+# main.cpp 추가
+OBJS := $(patsubst main.cpp, $(OBJ_DIR)/main.o, $(OBJS))
 # 출력 파일명
 TARGET = prob2
 
@@ -27,9 +29,12 @@ endif
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main.o: main.cpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
