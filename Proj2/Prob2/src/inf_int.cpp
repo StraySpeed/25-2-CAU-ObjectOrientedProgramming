@@ -271,53 +271,67 @@ bool operator<(const inf_int& a, const inf_int& b)
 
 int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면 false
 {
-	int res = 0;
-	if (a.length > b.length) res = 1; 
-	else if (a.length < b.length) res = -1;
-	else
-	{
-		for (unsigned int i = 0; i < a.length; i++)
-		{
-			if (a.digits[i] > b.digits[i]) res = 1;
-			else if (a.digits[i] == b.digits[i]) res = 0;
-			else res = -1;
-		}
-	}
-	return res;
+	if (a.length > b.length) return 1; 
+	else if (a.length < b.length) return -1;
+	else {
+        for (int i = a.length - 1; i >= 0; --i) {
+            if (a.digits[i] > b.digits[i]) return 1; // 다른 지점을 찾으면 즉시 반환
+            if (a.digits[i] < b.digits[i]) return -1; // 다른 지점을 찾으면 즉시 반환
+       }
+    }
+
+    return 0; // 모든 자릿수가 같음
 }
 
 inf_int operator-(const inf_int& a, const inf_int& b)
 {
-	inf_int c;
-	unsigned int i;
-	if (a.thesign == b.thesign) {	// 이항의 부호가 같을 경우 + 연산자로 연산
-		if (absCompare(a, b) == 0) c = 0;
-		else if (absCompare(a, b) == 1)
-		{   
-			c = a;
-			for (i = 0; i < b.length; i++)
-			{
-				c.SUB(b.digits[i], i);
-			}
-			c.thesign = a.thesign;
-		}
-		else
-		{
-			c = b;
-			for (i = 0; i < a.length; i++) // b.length로 되어 있어서 오류
-			{
-				c.SUB(a.digits[i], i);
-			}
-			c.thesign = !(a.thesign);
-		}
-		return c;
-	}
-	else {	// 이항의 부호가 다를 경우  연산자로 연산
-		c = b;
-		c.thesign = a.thesign;
+    inf_int c;
 
-		return a + c;
-	}
+    // 1. 두 피연산자의 부호가 다른 경우
+    if (a.thesign != b.thesign) {
+        c = b;
+        c.thesign = a.thesign; // 부호를 같게 만들어준 뒤
+        return a + c;          // 덧셈 연산으로 전환
+    }
+
+    // 2. 두 피연산자의 부호가 같은 경우
+    int cmp = absCompare(a, b); // 절댓값 비교
+
+    // 2-1. 두 수의 절댓값이 같은 경우 (예: 8 - 8)
+    if (cmp == 0) {
+        return inf_int(0); // 결과는 0
+    }
+    // 2-2. a의 절댓값이 b보다 큰 경우
+    else if (cmp > 0) {
+        c = a; // 큰 수에서
+        for (unsigned int i = 0; i < b.length; i++) {
+            c.SUB(b.digits[i], i); // 작은 수를 뺌
+        }
+        c.thesign = a.thesign; // 부호는 원래 부호를 따름
+    }
+    // 2-3. b의 절댓값이 a보다 큰 경우
+    else { // cmp < 0
+        c = b; // 큰 수에서
+        for (unsigned int i = 0; i < a.length; i++) {
+            c.SUB(a.digits[i], i); // 작은 수를 뺌
+        }
+        c.thesign = !a.thesign; // 부호는 원래 부호의 반대가 됨
+    }
+
+    // 3. 결과값의 불필요한 앞자리 0 제거
+    while (c.length > 1 && c.digits[c.length - 1] == '0') {
+        c.length--;
+    }
+    
+    // 버퍼 오버플로우 방지를 위해 문자열의 끝을 명시
+    c.digits[c.length] = '\0'; 
+
+    // 최종 결과가 0인 경우 부호를 항상 양수로 통일
+    if (c.length == 1 && c.digits[0] == '0') {
+        c.thesign = true;
+    }
+
+    return c;
 }
 
 //inf_int operator*(const inf_int& a, const inf_int& b)
@@ -341,26 +355,21 @@ ostream& operator<<(ostream& out, const inf_int& a)
 
 void inf_int::SUB(const char num, const unsigned int index)
 {
-	if (this->digits[index] >= num)
-		this->digits[index] = this->digits[index] - num + '0';
-	else
-	{
-		this->digits[index] = this->digits[index] - num + 10 + '0';
-		// 빼지는 수가 더 큰 상황에서 내림
-		unsigned int i = 1;
-		for (i = 1; i < this->length; i++)
-		{
-			if (this->digits[index + i] != '0') break;
-			this->digits[index + i] = '9';
-		}
-		this->digits[index + i] = this->digits[index + i] - 1;
+    // 현재 자릿수에서 뺄셈이 가능한 경우 (내림 불필요)
+    if (this->digits[index] >= num) {
+        this->digits[index] = this->digits[index] - num + '0';
+    }
+    // 내림이 필요한 경우
+    else {
+        // 10을 빌려와서 뺄셈 수행
+        this->digits[index] = this->digits[index] + 10 - num + '0';
 
-		// 자릿수가 줄어드는 상황
-		if (this->digits[index + i] == '0')
-		{
-			this->length = this->length - 1;
-			inf_int temp = *this;
-			*this = temp;
-		}
-	}
+        // 0이 아닌 상위 자릿수를 찾을 때까지 1씩 빌려오는 과정
+        unsigned int i = index + 1; // 바로 위 자릿수부터 시작
+        while (this->digits[i] == '0') {
+            this->digits[i] = '9'; // 0이었던 자리는 9가 됨
+            i++;
+        }
+        this->digits[i]--; // 0이 아니었던 첫 상위 자릿수에서 1을 뺌
+    }
 }
