@@ -12,14 +12,18 @@ if sys.platform == 'win32':
 ext_modules = [
     Extension(
         # 1. 최종적으로 생성될 파이썬 모듈 이름 (import precedence_wrapper)
-        'pysrc.precedence_wrapper',
+        'pysrc.calculator',
         
         # 2. 컴파일할 소스 파일 목록
         #    - 바인딩 코드(wrapper.cpp)와 필요한 모든 C++ 소스 파일을 포함해야 합니다.
         #    - main.cpp는 파이썬 모듈에 포함되면 안 됩니다.
         sources=[
-            'src/wrapper.cpp',
+            'wrapper.cpp',
             'src/precedence.cpp',
+            'src/devide.cpp',
+            'src/inf_int.cpp',
+            'src/sqrt.cpp',
+            'src/calculator.cpp'
         ],
         
         # 3. 헤더 파일이 있는 디렉토리
@@ -38,7 +42,7 @@ ext_modules = [
 
 # setup() 함수 호출
 setup(
-    name='precedence_wrapper',
+    name='calculator_wrapper',
     version='0.1.0',
     packages=['pysrc'],
     ext_modules=ext_modules,

@@ -1,11 +1,11 @@
-from pysrc import precedence_wrapper
+from pysrc import calculator
 from tkinter import Tk, ttk
 from tkinter import *
 
 class Application(Tk):
     WIDTH = '500'
     HEIGHT = '600'
-    OPERATORS = ['+', '-', '/', '*', '%', '^', '(', ')']
+    OPERATORS = ['+', '-', '/', '*', '%', '^', 'SQRT', '(', ')']
     ROW = 8
     COLUMN = 4
     def __init__(self):
@@ -13,6 +13,7 @@ class Application(Tk):
         self.title("Inf_int Calculator")
         self.geometry(str(Application.WIDTH) + 'x' +  str(Application.HEIGHT) + '+0+0')
         self.resizable(True, True)
+        self.calculator = calculator.Calculator()
 
         # 수식 입력, 출력 창
         self.display_main = None
@@ -64,8 +65,8 @@ class Application(Tk):
 
         # 버튼 생성
         buttons = [
-            ['(', ')', 'PREV', 'DELETE'],
-            ['%', '^', '', 'C'],
+            ['(', ')', 'C', 'DELETE'],
+            ['%', '^', 'SQRT', 'PREV'],
             ['7', '8', '9', '/'],
             ['4', '5', '6', '*'],
             ['1', '2', '3', '-'],
@@ -108,22 +109,24 @@ class Application(Tk):
         
         # '=' == 계산 실행
         elif value == '=':
-            try:
-                # display_main에서 현재 표현식 가져오기
-                expression = self.display_main.get()
-                
-                # eval()을 사용하여 문자열 표현식을 계산
-                # 참고: eval()은 간단하지만, 실제 상용 앱에서는 보안 위험이 있을 수 있습니다.
-                result = precedence_wrapper.Precedence.to_postfix(expression)
-                
-                # 서브 디스플레이에 계산 과정 표시
+            # display_main에서 현재 표현식 가져오기
+            expression = self.display_main.get()
+            if len(expression.strip()) == 0:
                 self.display_result.delete(0, END)
-                self.display_result.insert(0, result)
-                
-            except Exception as e:
-                # 계산 중 오류 발생 시 "Error" 표시
-                self.display_result.delete(0, END)
-                self.display_result.insert(0, "Error")
+                self.display_result.insert(0, "0")
+            else:
+                try:
+                    result = self.calculator.calculate(calculator.Precedence.to_postfix(expression))
+                    
+                    # 서브 디스플레이에 계산 과정 표시
+                    self.display_result.delete(0, END)
+                    self.display_result.insert(0, result)
+                    
+                except Exception as e:
+                    # 계산 중 오류 발생 시 "Error" 표시
+                    print(e)
+                    self.display_result.delete(0, END)
+                    self.display_result.insert(0, "Error")
                 
         # 연산자 == 한칸씩 공백 넣고 입력 (파싱 위해서)
         elif value in Application.OPERATORS:
