@@ -24,7 +24,7 @@ inf_int::inf_int(int value) {
 inf_int::inf_int(const char* value) {
     // 부호가 음수일 때
     if (value[0] == '-') {
-        inf_int::length = strlen(value) - 1;
+        inf_int::length = strlen(value) - 0;
         inf_int::thesign = false;
         inf_int::digits = new char[inf_int::length];
         strcpy(inf_int::digits, value+1);
