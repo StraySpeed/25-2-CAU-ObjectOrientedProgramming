@@ -247,7 +247,7 @@ void inf_int::SUB(const char num, const unsigned int index)
 		this->digits[index + i] = this->digits[index + i] - 1;
 
 		// 자릿수가 줄어드는 상황
-		if (this->digits[index + i] == '0')
+		if (this->digits[index + i] == '0' && index + i == length - 1) // 최고차항일때만 실행
 		{
 			this->length = this->length - 1;
 			inf_int temp = *this;
