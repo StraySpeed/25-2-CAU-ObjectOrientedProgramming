@@ -373,3 +373,19 @@ void inf_int::SUB(const char num, const unsigned int index)
         this->digits[i]--; // 0이 아니었던 첫 상위 자릿수에서 1을 뺌
     }
 }
+
+inf_int abs(const inf_int& value) {
+    inf_int temp(value);
+    // thesign을 무조건 양수로
+    temp.thesign = true;
+    return temp;
+}
+
+inf_int operator-(const inf_int& value) {
+    inf_int temp(value);
+    // 0은 부호 안 바꿈
+    if (temp == inf_int(0)) return temp;
+    // thesign을 반대로
+    temp.thesign = !temp.thesign;
+    return temp;
+}

@@ -35,3 +35,50 @@ inf_int sqrt(const inf_int& value) {
 	}
 	return result;
 }
+
+
+inf_int nthroot(const inf_int& base, inf_int exponent) {
+	// exponent가 1보다 작은 경우
+	if (exponent < inf_int(1)) {
+		throw invalid_argument("exponent must be bigger than 0");
+	} 
+
+	// 음수도 조건적으로 가능함(음수 base에 홀수 exponent면 base의 부호를 그대로 따라감)
+	// imaginary가 나오는 경우 예외 처리 하기 (음수 base에 짝수 exponent인 경우 제외하기)
+	if (base < inf_int(0) && (exponent % inf_int(2)) == inf_int(0)) {
+		throw invalid_argument("nth root of negative number is allowed only if odd exponent");
+	}
+
+	// 0, 1, -1(위에서 걸러진 후)의 n제곱근은 자기 자신
+	if (base == inf_int(0) || base == inf_int(1) || base == inf_int(-1)) {
+		return base;
+	}
+
+	// Binary Search
+	// mid*mid 대신 pow(mid, n)으로
+	bool positive = true;
+	if ((base < 0)) positive = false;
+	inf_int left(1), right = abs(base), mid, result;
+
+	while (!(left > right)) {
+		mid = (left + right) / inf_int(2);
+		inf_int midpow = pow(mid, exponent);
+		if (midpow == abs(base)) {
+			// return 시에 원래 부호 붙이기
+			if (positive) {
+				return mid;
+			}
+			return -mid;
+		} else if (midpow < abs(base)) {
+			left = mid + inf_int(1);
+			result = mid;
+		} else {
+			right = mid - inf_int(1);
+		}
+	}
+	// return 시에 원래 부호 붙이기
+	if (positive) {
+		return result;	
+	}
+	return -result;
+}

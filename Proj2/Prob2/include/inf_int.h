@@ -52,8 +52,17 @@ public :
     friend bool is_even(const inf_int& e); // 지수가 짝수인지 체크
     friend void div2(inf_int& e);          // 지수를 2로 나누는 함수
     friend inf_int pow(inf_int base, inf_int exp); // 거듭제곱 함수
+
+    // nth root에서 사용
+    // 절댓값 구하기
+    friend inf_int abs(const inf_int&);
+    // - 단항 연산, 부호 뒤집기
+    friend inf_int operator-(const inf_int&);
+
 };
 
 // 제곱근
 inf_int sqrt(const inf_int&);
+// n제곱근
+inf_int nthroot(const inf_int&);
 #endif
