@@ -130,7 +130,14 @@ class Application(Tk):
                 
         # 연산자 == 한칸씩 공백 넣고 입력 (파싱 위해서)
         elif value in Application.OPERATORS:
-            self.display_main.insert(END, ' ' + value + ' ')
+            if value in ['-']:
+                expr = self.display_main.get().strip()
+                if len(expr) == 0 or expr.split(' ')[-1] in Application.OPERATORS:
+                    self.display_main.insert(END, ' ' + value)
+                else:
+                    self.display_main.insert(END, ' ' + value + ' ')
+            else:
+                self.display_main.insert(END, ' ' + value + ' ')
 
         # 숫자 == 값 추가
         else:
