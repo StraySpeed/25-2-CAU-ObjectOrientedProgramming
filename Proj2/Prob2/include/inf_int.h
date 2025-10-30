@@ -28,6 +28,8 @@ public :
     friend bool operator!=(const inf_int& , const inf_int&);
     friend bool operator>(const inf_int& , const inf_int&);
     friend bool operator<(const inf_int& , const inf_int&);
+    friend bool operator>=(const inf_int& , const inf_int&);
+    friend bool operator<=(const inf_int& , const inf_int&);
     friend int absCompare(const inf_int& a, const inf_int& b); // 절댓값 비교
 
     // 더하기, 빼기 연산자
@@ -51,7 +53,7 @@ public :
     friend bool is_zero(const inf_int& e); // 지수가 0인지 체크
     friend bool is_even(const inf_int& e); // 지수가 짝수인지 체크
     friend void div2(inf_int& e);          // 지수를 2로 나누는 함수
-    friend inf_int pow(inf_int base, inf_int exp); // 거듭제곱 함수
+    friend inf_int pow(const inf_int& base, const inf_int& exp); // 거듭제곱 함수
 };
 
 // 제곱근

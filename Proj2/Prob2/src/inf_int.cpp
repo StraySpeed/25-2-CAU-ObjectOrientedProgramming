@@ -118,8 +118,7 @@ inf_int operator*(const inf_int& a, const inf_int& b)
 {
     
     // 0입력시 결과가 0으로 return값 : 0
-    if ((a.length == 1 && a.digits[0] == '0') ||
-        (b.length == 1 && b.digits[0] == '0')) {
+    if (a == inf_int(0) || b == inf_int(0)) {
         return inf_int(0);
     }
 
@@ -188,26 +187,28 @@ void div2(inf_int& e) {
     }
 }
 
-inf_int pow(inf_int base, inf_int exp) {
+inf_int pow(const inf_int& base, const inf_int& exp) {
     // 0^0 = 1로정의
     if (is_zero(base) && is_zero(exp)) {
         return inf_int(1);
     }
 
     inf_int result(1);
+    inf_int b = base;
+    inf_int e = exp;
 
     // 음수지수는지원하지않음
-    if (exp.thesign == false) {
+    if (e < inf_int(0)) {
         return inf_int(0);
     }
 
-    while (is_zero(exp) == false) { // 지수가 0이 아닐 경우에만 작동
-        if (!is_even(exp)) {          // exp의최하위비트가1이면
-            result = result * base;   // 곱하기
+    while (!is_zero(e)) { // 지수가 0이 아닐 경우에만 작동
+        if (!is_even(e)) {          // exp의최하위비트가1이면
+            result = result * b;   // 곱하기
         }
-        div2(exp);            // exp(지수)를 2로 나눔
-        if (!is_zero(exp)) {
-            base = base * base;       // base = base^2
+        div2(e);            // exp(지수)를 2로 나눔
+        if (!is_zero(e)) {
+            b = b * b;       // base = base^2
         }
     }
     return result;
@@ -216,6 +217,8 @@ inf_int pow(inf_int base, inf_int exp) {
 
 inf_int& inf_int::operator=(const inf_int& a)
 {
+    // 자기 자신을 대입하는 경우 고려
+    if (*this == a) return *this;
     if (this->digits) {
         delete this->digits;		// 이미 문자열이 있을 경우 제거.
     }
@@ -267,6 +270,14 @@ bool operator<(const inf_int& a, const inf_int& b)
 	else {
 		return true;
 	}
+}
+
+bool operator>=(const inf_int& a, const inf_int& b) {
+    return !(a < b);
+}
+
+bool operator<=(const inf_int& a, const inf_int& b) {
+    return !(a > b);
 }
 
 int absCompare(const inf_int& a, const inf_int& b) // a가 크면 true 아니면 false
@@ -334,12 +345,6 @@ inf_int operator-(const inf_int& a, const inf_int& b)
     return c;
 }
 
-//inf_int operator*(const inf_int& a, const inf_int& b)
-//{
-	// to be filled
-//}
-
-
 ostream& operator<<(ostream& out, const inf_int& a)
 {
 	int i;
@@ -372,4 +377,123 @@ void inf_int::SUB(const char num, const unsigned int index)
         }
         this->digits[i]--; // 0이 아니었던 첫 상위 자릿수에서 1을 뺌
     }
+}
+
+// 새롭게 구현한 몫과 나눗셈
+inf_int operator/(const inf_int& a, const inf_int& b) {
+
+    // b가 0이면 오류 출력? 어떻게 해야할까?
+
+    // 몫, 절댓값 계산을 위한 inf_int
+    inf_int quotient;
+    inf_int compare1(a);
+    inf_int compare2(b);
+    compare1.thesign = true;
+    compare2.thesign = true;
+
+    // 나누는 수가 크거나 같다면 특이 케이스 처리
+    if (operator<(compare1, compare2)) {
+        strcpy(quotient.digits, "0");
+        quotient.length = 1;
+    }
+    else if (operator==(compare1, compare2)) {
+        strcpy(quotient.digits, "1");
+        quotient.length = 1;
+    }
+    // 나누어지는 수가 더 큰 경우
+    else {
+
+        // inf_int형 10과 1, 자리수 차이에 의한 계산 시작점
+        inf_int ten(10);
+        inf_int one(1);
+
+        int exp = compare1.length - compare2.length;
+
+        for (int i = exp; i >= 0; i--) {
+            // inf_int형 지수, compare1에서 num*sub 빼기
+            inf_int exponent(i);
+            inf_int num(0);
+            inf_int sub = operator*(compare2, pow(ten, exponent));
+
+            // 몫의 한자리 씩 구하기
+            inf_int temp; 
+            while (true) {
+                temp = operator*(operator+(num, one), sub);
+                if (operator>(temp, compare1)) {
+                    break; // (num+1)*sub 가 compare1보다 커지면 멈춤
+                }
+                num = operator+(num, one);
+            }
+
+            if (operator>(num, inf_int(0))) {
+                compare1 = operator-(compare1, operator*(num, sub));
+                quotient = operator+(quotient, operator*(num, pow(ten, exponent)));
+            }
+            else{
+                continue; 
+            }
+            // 점점 빼다가 compare1이 나누는 수보다 작아지면 그 수가 나머지
+            if (operator<(compare1, compare2)) {
+                break;
+            }
+        }
+    }
+    // 몫 부호 결정 및 길이 설정
+    if (a.thesign == b.thesign) {
+        quotient.thesign = true;
+    }
+    else {
+        quotient.thesign = false;
+    }
+    
+    quotient.length = strlen(quotient.digits);
+    return quotient;
+}
+
+inf_int operator%(const inf_int& a, const inf_int& b) {
+
+    // 나머지, 몫에 대한 inf_int
+    inf_int store = operator/(a, b);
+    inf_int remainder = operator-(a, operator*(b, store));
+
+    // 나머지 부호는 나누어지는 수 부호를 따라간다.
+    remainder.length = strlen(remainder.digits);
+    remainder.thesign = a.thesign;
+
+    return remainder;
+}
+
+// inf_int에 sqrt() 추가함
+// =, ==, <, <=, +, -, *, / 가 구현되었다고 가정
+inf_int sqrt(const inf_int& value) {
+	// 음수의 제곱근
+	if (value < inf_int(0)) {
+		// 복소수도 하려고 했는데, 생각해보니 inf_int가 정수형이어서 안해도 될 거 같음
+		// value.imaginary = true;
+		// 예외 처리, 음수의 제곱근 정의 안 할거임
+		throw invalid_argument("Sqrt of negative number is not allowed");
+	}
+	// 0과 1의 제곱근은 자기 자신
+	if (value == inf_int(0) || value == inf_int(1)) {
+		return value;
+	}
+	// Binary Search
+	// 1부터 value까지의 범위에서 value의 제곱근 찾기 (어떤 수를 제곱했을 때 value가 되는 수 찾기)
+	// return mid: mid*mid == value (정확한 값을 찾았을 때)
+	// return result: mid*mid < value인 가장 큰 mid (정확한 값은 아니고, 소수점 버림)
+	inf_int left(1), right = value, mid, result;
+
+	while (!(left > right)) {
+		mid = (left + right) / inf_int(2);
+		inf_int midSquare = mid * mid;
+		if (midSquare == value) {
+			return mid;
+		} else if (midSquare < value) {
+			left = mid + inf_int(1);
+			result = mid; // Update answer
+		} else {
+			right = mid - inf_int(1);
+		}
+	}
+	return result;
 }

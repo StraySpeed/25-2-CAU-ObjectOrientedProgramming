@@ -19,7 +19,6 @@ ext_modules = [
         sources=[
             'wrapper.cpp',
             'src/precedence.cpp',
-            'src/devide.cpp',
             'src/inf_int.cpp',
             'src/sqrt.cpp',
             'src/calculator.cpp'
