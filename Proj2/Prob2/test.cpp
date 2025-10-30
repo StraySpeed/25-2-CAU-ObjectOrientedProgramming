@@ -1,37 +1,45 @@
+#include "calculator.h"
+#include "precedence.h"
 #include "inf_int.h"
 #include <iostream>
-#include <string.h>
-#include <stdlib.h>
-#include <stdlib.h>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
-int main()
-{
-	inf_int a(300), e;
-	inf_int b(100);
-	inf_int c("321111111111122222222222233333333333444444444445555555555");
-	inf_int d("123451987651234572749499923455022211");
-	inf_int f=d;
-	inf_int g(f);
-
-	// cin >> g ;   // not required
-
-	//a=b*c;
-	// e=g/f;       // not required
-	a = a - b;
-	//b= c - d;
-
-
-	if (f==d) {
-		cout << "a : " << a << endl;
-		cout << "b : " << b << endl;
-		cout << "c : " << c << endl;
-		cout << "d : " << d << endl;
-		cout << "e : " << e << endl;
-		cout << "f : " << f << endl;
-		cout << "g : " << g << endl;
-	}
-
+int main() {
+	fstream textfile;
+    string line; string delimeter = ",";
+	string file = "test.txt";
+	string expression, answer;
+	inf_int cal;
+	Calculator c;
+	int pos = 0;
+    textfile.open(file, ios::in);
+    if (textfile.is_open()) {
+        while (getline(textfile, line)) {
+            // parse line
+			pos = line.find(delimeter, 0);
+			expression = line.substr(0, pos);
+			answer = line.substr(pos + 1);
+			cal = c.calculate(Precedence::postfix(expression));
+			if (cal == inf_int(answer.c_str())) {
+				cout << "Correct!" << endl;
+			}
+			else {
+				cout << "Wrong!" << endl;
+				cout << "Expression = " << expression << endl;
+				cout << "Postfix = " << Precedence::postfix(expression) << endl;
+				cout << "Answer = " << answer << endl;
+				cout << "Calculated Answer = " << cal << endl;
+			}
+        }
+        textfile.close();
+    }
+    else {
+        // Exception
+        cout << "Cannot Open " + file << endl;
+        throw new exception();
+    }
 	return 0;
 }
