@@ -9,10 +9,8 @@ prob2/
 ├─ src/                  # 소스 파일(.cpp)
 │   ├─ application.cpp
 │   ├─ calculator.cpp
-│   ├─ devide.cpp
 │   ├─ inf_int.cpp
 │   ├─ precedence.cpp
-│   ├─ sqrt.cpp
 │
 ├─ pysrc/                # Python 소스 파일(.pyd)
 │   ├─ calculator.pyd
@@ -21,7 +19,8 @@ prob2/
 ├─ setup.py	# C++ to Python
 ├─ main.cpp	# main() 포함
 ├─ main.py	# Python GUI
-├─ file1.txt
+├─ test.cpp	# 작동 테스트용
+├─ test.txt		# Test Case
 ├─ Makefile
 ├─ requirements.txt
 ├─ README.txt

@@ -21,7 +21,7 @@ std::string Precedence::postfix(std::string str) {
     std::stack<std::string> stack;
     std::string symbol;
     Precedence::precedence token;
-    std::string const DELIMETER = " ";
+    std::string const DELIMITER = " ";
     std::string returnstr = "";
 
     // for safety:precedence 0

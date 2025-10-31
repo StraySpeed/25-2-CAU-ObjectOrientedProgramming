@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from setuptools import setup, Extension
 import pybind11
 
@@ -7,6 +7,9 @@ import pybind11
 extra_compile_args = ['-std=c++17', '-O3']
 if sys.platform == 'win32':
     extra_compile_args = ['/std:c++17', '/O2']
+
+if not os.path.exists('pysrc'):
+    os.mkdir('pysrc')
 
 # 래핑할 C++ 모듈에 대한 정보를 담는 Extension 객체 생성
 ext_modules = [
@@ -20,7 +23,6 @@ ext_modules = [
             'wrapper.cpp',
             'src/precedence.cpp',
             'src/inf_int.cpp',
-            'src/sqrt.cpp',
             'src/calculator.cpp'
         ],
         
