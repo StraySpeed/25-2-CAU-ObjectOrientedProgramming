@@ -66,5 +66,5 @@ public :
 // 제곱근
 inf_int sqrt(const inf_int&);
 // n제곱근
-inf_int nthroot(const inf_int&);
+inf_int nthroot(const inf_int&, inf_int);
 #endif

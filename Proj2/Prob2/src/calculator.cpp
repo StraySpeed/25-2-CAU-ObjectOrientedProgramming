@@ -63,7 +63,19 @@ inf_int Calculator::calculate(std::string expr) {
         else if (symbol == "SQRT") {
             a = inf_int(s.top());
             s.pop();
-            s.push(sqrt(a));
+            b = inf_int(s.top());
+            s.pop();
+            if (b == inf_int(2)) {
+                s.push(sqrt(a));
+            }
+            else {
+                s.push(nthroot(a, b));
+            }
+        }
+        else if (symbol == "ABS") {
+            a = inf_int(s.top());
+            s.pop();
+            s.push(abs(a));
         }
         else {
             s.push(inf_int(symbol.c_str()));
@@ -71,6 +83,7 @@ inf_int Calculator::calculate(std::string expr) {
     }
     // 이전 계산값을 수정
     prev = s.top();
+    if (s.size() != 1) throw exception();
     return s.top();
 }
 

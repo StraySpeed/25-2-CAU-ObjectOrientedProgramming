@@ -5,7 +5,7 @@ from tkinter import *
 class Application(Tk):
     WIDTH = '500'
     HEIGHT = '600'
-    OPERATORS = ['+', '-', '/', '*', '%', '^', 'SQRT', '(', ')']
+    OPERATORS = ['+', '-', '/', '*', '%', '^', 'SQRT', '(', ')', 'ABS']
     ROW = 8
     COLUMN = 4
     def __init__(self):
@@ -70,7 +70,7 @@ class Application(Tk):
             ['7', '8', '9', '/'],
             ['4', '5', '6', '*'],
             ['1', '2', '3', '-'],
-            ['0', '', '=', '+']
+            ['0', 'ABS', '=', '+']
         ]
 
         for r_idx, row_val in enumerate(buttons):
@@ -89,6 +89,7 @@ class Application(Tk):
         # C == 전부 지우기
         if value == 'C':
             self.display_main.delete(0, END)
+            self.display_result.delete(0, END)
 
         # DELETE == 한개만 지우기
         # 마지막 입력값을 확인하고 해당 개수만큼 지우기
@@ -97,12 +98,15 @@ class Application(Tk):
             # 없을 경우 무시
             if len(text) < 1:
                 pass
-            # 연산자일 경우
-            if len(text) > 1 and self.display_main.get()[-1] == ' ':
-                self.display_main.delete(len(self.display_main.get()) - 2, END)
-            # PREV일 경우
-            elif len(text) >= 4 and self.display_main.get()[-4:] == 'PREV':
+            # ABS일 경우
+            elif len(text) >= 4 and self.display_main.get()[-4:] == 'ABS ':
                 self.display_main.delete(len(self.display_main.get()) - 4, END)
+            # PREV, SQRT일 경우
+            elif len(text) >= 5 and (self.display_main.get()[-5:] == 'PREV ' or self.display_main.get()[-5:] == 'SQRT '):
+                self.display_main.delete(len(self.display_main.get()) - 5, END)
+            # 연산자일 경우
+            if len(text) >= 1 and self.display_main.get()[-1] == ' ':
+                self.display_main.delete(len(self.display_main.get()) - 2, END)            
             # 숫자일 경우
             else:
                 self.display_main.delete(len(self.display_main.get()) - 1, END)
@@ -130,7 +134,14 @@ class Application(Tk):
                 
         # 연산자 == 한칸씩 공백 넣고 입력 (파싱 위해서)
         elif value in Application.OPERATORS:
-            self.display_main.insert(END, ' ' + value + ' ')
+            if value == '-':
+                text = self.display_main.get()
+                if len(text) == 0 or text[-1] == ' ':
+                    self.display_main.insert(END, ' ' + value)
+                else:
+                    self.display_main.insert(END, ' ' + value + ' ')
+            else:
+                self.display_main.insert(END, ' ' + value + ' ')
 
         # 숫자 == 값 추가
         else:

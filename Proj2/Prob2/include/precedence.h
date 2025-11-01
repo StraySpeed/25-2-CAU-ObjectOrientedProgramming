@@ -5,12 +5,12 @@
 class Precedence {
     public:
         enum precedence {
-            LPAREN, RPAREN, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, SQRT, EOS, OPERAND
+            LPAREN, RPAREN, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, SQRT, ABS, EOS, OPERAND
         };
         // in-stack precedence
-        static constexpr int isp[11] = { 0, 19, 12, 12, 13, 13, 13, 14, 16, 0, 0};
+        static constexpr int isp[] = { 0, 19, 12, 12, 13, 13, 13, 14, 16, 16, 0, 0};
         // in-coming precedence
-        static constexpr int icp[11] = { 20, 19, 12, 12, 13, 13, 13, 14, 17, 0, 0 };
+        static constexpr int icp[] = { 20, 19, 12, 12, 13, 13, 13, 14, 17, 17, 0, 0};
 
         static precedence getToken(std::string symbol);
 
