@@ -390,6 +390,7 @@ inf_int operator/(const inf_int& a, const inf_int& b) {
     inf_int compare2(b);
     compare1.thesign = true;
     compare2.thesign = true;
+    if (b == inf_int(0)) throw std::invalid_argument("Division by zero is not allowed.");
 
     // 나누는 수가 크거나 같다면 특이 케이스 처리
     if (operator<(compare1, compare2)) {

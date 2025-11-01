@@ -83,7 +83,7 @@ inf_int Calculator::calculate(std::string expr) {
     }
     // 이전 계산값을 수정
     prev = s.top();
-    if (s.size() != 1) throw exception();
+    if (s.size() != 1) throw invalid_argument("Wrong Expression.");
     return s.top();
 }
 
