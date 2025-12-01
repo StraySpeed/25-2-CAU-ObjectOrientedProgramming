@@ -17,7 +17,7 @@ class Entity(pygame.sprite.Sprite, abc.ABC):
         :param move_speed: 이동 속도
         """        
         super().__init__();   
-        self.name = 'Entity_' + Entity.ENTITY_COUNT
+        self.name = 'Entity_' + str(Entity.ENTITY_COUNT)
         ''' 이름 '''
         self.strength = strength
         ''' 공격력 '''

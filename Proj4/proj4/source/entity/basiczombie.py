@@ -1,9 +1,10 @@
 import pygame
 from .entity import Entity
+from ..const import *
 
 class BasicZombie(Entity):
     def __init__(self, x, y):
-        super().__init__(x, y, image_path, strength = 50, max_hp = 305, attack_range = 1, attack_speed = 500, move_speed = 1)
+        super().__init__(x, y, image_path = TEST_SPRITE, strength = 50, max_hp = 305, attack_range = 1, attack_speed = 500, move_speed = 1)
 
     def animate(self, dt):
         # 구현 필요함

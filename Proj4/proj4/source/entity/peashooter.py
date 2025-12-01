@@ -1,8 +1,10 @@
 import pygame
 from .entity import Entity
+from ..const import *
+
 class Peashooter(Entity):
     def __init__(self, x, y):
-        super().__init__(x, y, image_path, strength = 50, max_hp = 300, attack_range = 10, attack_speed = 1000, move_speed = 0)
+        super().__init__(x, y, image_path = TEST_SPRITE, strength = 50, max_hp = 300, attack_range = 10, attack_speed = 1000, move_speed = 0)
 
     def animate(self, dt):
         # 구현 필요함
