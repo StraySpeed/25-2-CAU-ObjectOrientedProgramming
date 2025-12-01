@@ -1,17 +1,5 @@
-import pygame
-import sys
+from source.app import Application
 
-from pygame.locals import *
-
-pygame.init()
-
-DISPLAY = pygame.display.set_mode((800,600))
-
-pygame.display.set_caption("OOP Proj4")
-
-while True:
-    for event in pygame.event.get():    
-        if event.type == QUIT:          
-            pygame.quit()               
-            sys.exit()                  
-        pygame.display.update()
+if __name__ == "__main__":
+    app = Application()
+    app.run()
