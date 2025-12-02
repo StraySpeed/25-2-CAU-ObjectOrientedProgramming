@@ -2,6 +2,7 @@ import pygame
 from .stateManager import StateManager
 from .gameManager import GameManager
 from ..loader.fontLoader import FontLoader
+from ..loader.imageLoader import ImageLoader
 from ..const import *
 
 class Button:
@@ -22,6 +23,11 @@ class Button:
         self.hover_color = HOVER_COLOR
         self.text_color = TEXT_COLOR
 
+        #self.image_loader = ImageLoader(*BUTTON_LIST)
+        #self.defaultSprite = self.image_loader.getSprite(0)
+        #self.hoverSprite = self.image_loader.getSprite(1)
+        #self.isHovering = False
+
     def draw(self, surface):
         mouse_pos = pygame.mouse.get_pos()
         color = self.hover_color if self.rect.collidepoint(mouse_pos) else self.default_color
@@ -31,7 +37,8 @@ class Button:
         pygame.draw.rect(surface, color, self.rect, border_radius=10)
         # 테두리 그리기
         pygame.draw.rect(surface, BLACK, self.rect, 2, border_radius=10)
-        
+        #surface.blit(self.hoverSprite if self.isHovering else self.defaultSprite, self.rect)
+
         # 텍스트 그리기
         text_surf = self.font.render(self.text, True, self.text_color)
         text_rect = text_surf.get_rect(center=self.rect.center)
@@ -41,6 +48,9 @@ class Button:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.action:
                 self.action()
+
+        if event.type == pygame.MOUSEMOTION:
+            self.isHovering = self.rect.collidepoint(event.pos)
 
 class UIManager:
     _instance = None # 싱글톤 인스턴스
@@ -75,6 +85,12 @@ class UIManager:
         self.overlay = pygame.Surface((self.width, self.height))
         self.overlay.set_alpha(150) # 반투명하게
         self.overlay.fill(BLACK) # 검은색
+        loader = ImageLoader(VICTORY_OVERLAY)
+        loader.resize(0, self.width, self.height)
+        self.victory_overlay = loader.getSprite(0)
+        loader = ImageLoader(DEFEAT_OVERLAY)
+        loader.resize(0, self.width, self.height)
+        self.defeat_overlay = loader.getSprite(0)
 
         # 버튼 생성
         self._create_menu_buttons()
@@ -141,9 +157,9 @@ class UIManager:
         """
         메뉴 버튼 생성
         """
-        # 가로 중앙(0.5), 세로 35% 지점에 너비 25%, 높이 10% 버튼
-        rect_play = self.calc_center_rect(0.5, 0.4, 0.25, 0.1)
-        rect_quit = self.calc_center_rect(0.5, 0.55, 0.25, 0.1)
+        # 가로 중앙(0.5), 세로 70%/85% 지점에 너비 25%, 높이 10% 버튼
+        rect_play = self.calc_center_rect(0.5, 0.7, 0.25, 0.1)
+        rect_quit = self.calc_center_rect(0.5, 0.85, 0.25, 0.1)
 
         btn_play = Button(rect_play, "Game Play", self.btn_font,
                           lambda: self.state_mgr.change_state(STATE_LEVEL_SELECT))
@@ -160,14 +176,14 @@ class UIManager:
         def start_lvl(n):
             return lambda: self.state_mgr.start_game(n, GameManager, self.width, self.height)
 
-        # 레벨 버튼: 너비 25%, 높이 8%로 설정
-        # y위치를 25%, 35%, 45% ... 로 배치
-        btn_w, btn_h = 0.25, 0.08
+        # 레벨 버튼) 너비 25%, 높이 10%로 설정
+        # y위치를 40%, 55%, 70% ... 로 배치
+        btn_w, btn_h = 0.25, 0.1
         
-        rect_l1 = self.calc_center_rect(0.5, 0.30, btn_w, btn_h)
-        rect_l2 = self.calc_center_rect(0.5, 0.40, btn_w, btn_h)
-        rect_l3 = self.calc_center_rect(0.5, 0.50, btn_w, btn_h)
-        rect_back = self.calc_center_rect(0.5, 0.65, btn_w, btn_h)
+        rect_l1 = self.calc_center_rect(0.20, 0.55, btn_w, btn_h)
+        rect_l2 = self.calc_center_rect(0.5, 0.55, btn_w, btn_h)
+        rect_l3 = self.calc_center_rect(0.80, 0.55, btn_w, btn_h)
+        rect_back = self.calc_center_rect(0.5, 0.95, btn_w, btn_h)
 
         self.level_buttons = [
             Button(rect_l1, "Level 1", self.btn_font, start_lvl(1)),
@@ -180,18 +196,18 @@ class UIManager:
         """
         일시정지 화면 버튼들
         """
-        btn_w, btn_h = 0.25, 0.08
+        btn_w, btn_h = 0.25, 0.1
         
         # Resume: 다시 게임으로
         btn_resume = Button(self.calc_center_rect(0.5, 0.4, btn_w, btn_h), "Resume", self.btn_font,
                             lambda: self.state_mgr.change_state(STATE_GAME))
         
         # Restart: 현재 레벨 재시작
-        btn_restart = Button(self.calc_center_rect(0.5, 0.5, btn_w, btn_h), "Restart", self.btn_font,
+        btn_restart = Button(self.calc_center_rect(0.5, 0.55, btn_w, btn_h), "Restart", self.btn_font,
                              lambda: self.state_mgr.restart_game(GameManager, self.width, self.height))
         
         # Main Menu: 메뉴로 나가기
-        btn_menu = Button(self.calc_center_rect(0.5, 0.6, btn_w, btn_h), "Main Menu", self.btn_font,
+        btn_menu = Button(self.calc_center_rect(0.5, 0.7, btn_w, btn_h), "Main Menu", self.btn_font,
                           lambda: self.state_mgr.quit_current_game())
 
         self.pause_buttons = [btn_resume, btn_restart, btn_menu]
@@ -248,10 +264,10 @@ class UIManager:
             self._draw_pause_screen(screen)
 
         elif current_state == STATE_GAME_OVER:
-            self._draw_result_screen(screen, "GAME OVER", (200, 0, 0))
+            self._draw_result_screen(screen, "", (200, 0, 0))
 
         elif current_state == STATE_GAME_CLEAR:
-            self._draw_result_screen(screen, "LEVEL CLEARED!", (0, 200, 0))
+            self._draw_result_screen(screen, "", (0, 200, 0))
 
     def _draw_main_menu(self, screen):
         """
@@ -259,7 +275,7 @@ class UIManager:
         """
         if self.main_background: screen.blit(self.main_background, (0, 0))
         # 제목 위치도 비율로 계산 (중앙 상단 15%)
-        title_surf = self.title_font.render("Main Menu", True, TITLE_COLOR)
+        title_surf = self.title_font.render("", True, TITLE_COLOR)
         title_rect = title_surf.get_rect(center=(self.width * 0.5, self.height * 0.15))
         screen.blit(title_surf, title_rect)
         
@@ -271,9 +287,9 @@ class UIManager:
         레벨 선택 화면 
         """
         if self.select_level_background: screen.blit(self.select_level_background, (0, 0))
-        guide_surf = self.guide_font.render("Select Level", True, TEXT_COLOR)
-        guide_rect = guide_surf.get_rect(center=(self.width * 0.5, self.height * 0.15))
-        screen.blit(guide_surf, guide_rect)
+        #guide_surf = self.guide_font.render("Select Level", True, TEXT_COLOR)
+        #guide_rect = guide_surf.get_rect(center=(self.width * 0.5, self.height * 0.15))
+        #screen.blit(guide_surf, guide_rect)
         
         for btn in self.level_buttons:
             btn.draw(screen)
@@ -311,7 +327,12 @@ class UIManager:
         """
         결과 화면 (오버/클리어 공용)
         """
-        screen.blit(self.overlay, (0, 0)) # 반투명 배경
+        if self.state_mgr.current_state == STATE_GAME_CLEAR:
+            screen.blit(self.victory_overlay, (0, 0))
+        if self.state_mgr.current_state == STATE_GAME_OVER:
+            screen.blit(self.defeat_overlay, (0, 0)) # 반투명 배경
+        else:
+            screen.blit(self.overlay, (0, 0)) # 반투명 배경
         
         title_surf = self.title_font.render(text, True, color)
         title_rect = title_surf.get_rect(center=(self.width * 0.5, self.height * 0.3))

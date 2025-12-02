@@ -39,11 +39,16 @@ BUTTON_COLOR = (150, 150, 150)
 # ===============================
 # Level
 # ===============================
-MAIN_BACKGROUND_IMAGE = TEST_IMAGE
-SELECT_LEVEL_BACKGROUND_IMAGE = TEST_IMAGE
+MAIN_BACKGROUND_IMAGE = os.path.join(RESOURCE, "interface", "mainmenu.png")
+SELECT_LEVEL_BACKGROUND_IMAGE = os.path.join(RESOURCE, "interface", "selectmenu.png")
 LEVEL1_BACKGROUND_IMAGE = TEST_IMAGE
 LEVEL2_BACKGROUND_IMAGE = TEST_IMAGE
 LEVEL3_BACKGROUND_IMAGE = TEST_IMAGE
+
+VICTORY_OVERLAY = os.path.join(RESOURCE, "interface", "victory.png")
+DEFEAT_OVERLAY = os.path.join(RESOURCE, "interface", "defeat.png")
+
+BUTTON_LIST = []
 
 MAP_COLUMNS = 9   # 가로 타일 개수
 MAP_ROWS = 5      # 세로 타일 개수
@@ -68,6 +73,11 @@ STATE_GAME_CLEAR = "GAME_CLEAR"
 # ===============================
 # TILE SPRITE
 # ===============================
+TILE_DEFAULT = os.path.join(RESOURCE, "map", "map_default.png")
+TILE_CLICKED = os.path.join(RESOURCE, "map", "map_hover.png")
+TILE_HOVER = os.path.join(RESOURCE, "map", "map_hover.png")
+
+# 아래는 테스트 에셋
 TILE_DEFAULT_1 = os.path.join(ASSET, "sprite", "tile_default_1.png")
 TILE_DEFAULT_2 = os.path.join(ASSET, "sprite", "tile_default_2.png")
 TILE_DEFAULT_3 = os.path.join(ASSET, "sprite", "tile_default_3.png")
@@ -98,9 +108,13 @@ TILE_HOVER_LIST = [
 # ===============================
 # PLANT SPRITE
 # ===============================
-PLANT_SHOOTER = os.path.join(ASSET, "sprite", "plant_shooter.png")
-PLANT_SUNFLOWER = os.path.join(ASSET, "sprite", "plant_sunflower.png")
-PLANT_DEFENDER = os.path.join(ASSET, "sprite", "plant_defender.png")
+#PLANT_SHOOTER = os.path.join(ASSET, "sprite", "plant_shooter.png")
+#PLANT_SUNFLOWER = os.path.join(ASSET, "sprite", "plant_sunflower.png")
+#PLANT_DEFENDER = os.path.join(ASSET, "sprite", "plant_defender.png")
+PLANT_SHOOTER = os.path.join(RESOURCE, "character", "attack_plant.png")
+PLANT_SUNFLOWER = os.path.join(RESOURCE, "character", "sunflower.png")
+PLANT_DEFENDER = os.path.join(RESOURCE, "character", "walnut.png")
+
 SHOVEL = os.path.join(ASSET, "sprite", "shovel.png")
 
 PLANT_SPRITE_LIST = [
@@ -110,10 +124,14 @@ PLANT_SPRITE_LIST = [
     SHOVEL
 ]
 
-# ZOMBIE_SPRITE
-
+# ===============================
+# ZOMBIE SPRITE
+# ===============================
+ZOMBIE_BASIC = os.path.join(RESOURCE, "character", "zombie1.png")
+ZOMBIE_POWER = os.path.join(RESOURCE, "character", "zombie2.png")
 ZOMBIE_SPRITE_LIST = [  
-    ZOMBIE_SPRITE
+    ZOMBIE_BASIC,
+    ZOMBIE_POWER
 ]
 
 def get_game_level(level):

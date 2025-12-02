@@ -28,7 +28,8 @@ class MapSystemManager:
         self.icon_size = int(self.menu_height * 0.8)
 
         # 1. 스테이지별 타일 이미지 경로 정의
-        self.stage_sprites = {
+
+        """self.stage_sprites = {
             1: [
                 TILE_DEFAULT_LIST[0],
                 TILE_CLICKED_LIST[0],
@@ -47,6 +48,8 @@ class MapSystemManager:
         }
         paths = self.stage_sprites.get(stage_num)
         self.tile_loader = ImageLoader(*paths)
+        """
+        self.tile_loader = ImageLoader(TILE_DEFAULT, TILE_CLICKED, TILE_HOVER)
         for i in range(3): self.tile_loader.resize(i, self.tile_size, self.tile_size)
 
         # 2. 식물/UI 이미지 경로 정의
