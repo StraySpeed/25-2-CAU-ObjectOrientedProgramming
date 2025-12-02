@@ -3,16 +3,31 @@ from .entity import Entity
 from ..const import *
 
 class BasicZombie(Entity):
-    def __init__(self, x, y):
-        super().__init__(x, y, image_path = TEST_SPRITE, strength = 50, max_hp = 305, attack_range = 1, attack_speed = 500, move_speed = 1)
+    def __init__(self, x, y, image):
+        super().__init__(
+            x, y, 
+            image=image, 
+            strength=50, 
+            max_hp=305, 
+            attack_range=10, 
+            attack_speed=500, 
+            move_speed=50
+        )
 
     def animate(self, dt):
-        # 구현 필요함
+        # 애니메이션 로직 구현 필요
         pass
 
     def attack(self, plant):
         now = pygame.time.get_ticks()
-        # 공격 범위 내에 있다면
-        if (now - self.last_attack_time > self.attack_speed) and (self.x - plant.x < self.attack_range):
+        
+        # 공격 쿨타임 및 거리 체크
+        if now - self.last_attack_time > self.attack_speed:
             self.last_attack_time = now
-            plant.take_damage(self.strength) # 식물에게 공격력만큼 데미지
+            
+            # Entity 클래스에 정의된 setDamage 사용
+            if hasattr(plant, 'setDamage'):
+                plant.setDamage(self.strength) 
+                print(f"[DEBUG] Basiczombie({self.name}) attacks plant({plant.name})! Damage: {self.strength}")
+            return True
+        return False

@@ -1,7 +1,7 @@
 import pygame
 from .stateManager import StateManager
 from .gameManager import GameManager
-from .fontLoader import FontLoader
+from ..loader.fontLoader import FontLoader
 from ..const import *
 
 class Button:
@@ -254,7 +254,9 @@ class UIManager:
             self._draw_result_screen(screen, "LEVEL CLEARED!", (0, 200, 0))
 
     def _draw_main_menu(self, screen):
-        """메인 화면"""
+        """
+        메인 화면
+        """
         if self.main_background: screen.blit(self.main_background, (0, 0))
         # 제목 위치도 비율로 계산 (중앙 상단 15%)
         title_surf = self.title_font.render("Main Menu", True, TITLE_COLOR)
@@ -265,7 +267,9 @@ class UIManager:
             btn.draw(screen)
 
     def _draw_level_select(self, screen):
-        """ 레벨 선택 화면 """
+        """ 
+        레벨 선택 화면 
+        """
         if self.select_level_background: screen.blit(self.select_level_background, (0, 0))
         guide_surf = self.guide_font.render("Select Level", True, TEXT_COLOR)
         guide_rect = guide_surf.get_rect(center=(self.width * 0.5, self.height * 0.15))
@@ -275,7 +279,10 @@ class UIManager:
             btn.draw(screen)
 
     def _draw_game_elements(self, screen):
-        """게임 내 객체와 그리드 그리기"""
+        """
+        게임 내 객체 그리기
+        """
+        # 배경 그리기
         if self.state_mgr.current_level_num == 1:
             if self.level1_background: screen.blit(self.level1_background, (0, 0))
         elif self.state_mgr.current_level_num == 2:
@@ -283,18 +290,14 @@ class UIManager:
         elif self.state_mgr.current_level_num == 3:
             if self.level3_background: screen.blit(self.level3_background, (0, 0))
 
-        # 그리드
-        for i in range(5):
-            y = 100 + (i * 100)
-            pygame.draw.line(screen, BLACK, (0, y), (self.width, y))
-            pygame.draw.line(screen, BLACK, (0, y+100), (self.width, y+100))
-
-        # 객체
+        # Gamemanager에서 관리
         if self.state_mgr.game_manager:
             self.state_mgr.game_manager.draw(screen)
 
     def _draw_pause_screen(self, screen):
-        """일시정지 화면"""
+        """
+        일시정지 화면
+        """
         screen.blit(self.overlay, (0, 0)) # 반투명 배경
         
         title_surf = self.title_font.render("PAUSED", True, WHITE)
@@ -305,7 +308,9 @@ class UIManager:
             btn.draw(screen)
 
     def _draw_result_screen(self, screen, text, color):
-        """결과 화면 (오버/클리어 공용)"""
+        """
+        결과 화면 (오버/클리어 공용)
+        """
         screen.blit(self.overlay, (0, 0)) # 반투명 배경
         
         title_surf = self.title_font.render(text, True, color)

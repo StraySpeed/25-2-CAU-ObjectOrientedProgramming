@@ -29,8 +29,8 @@ class Tile:
     # plant가 죽으면 tile 비우기 = plant 비우기
     # main의 update에서 실행
     def OnUpdate(self):
-        if self.plant and self.plant.isDead:
-            print("식물 제거")
+        if self.plant and self.plant.is_dead:
+            print(f"[DEBUG] {self.plant.name} 제거됨")
             self.plant = None
     
     def draw(self, screen):
@@ -47,9 +47,10 @@ class Tile:
         # 그리기
         screen.blit(sprite, self.rect)
 
+        # 수정 - Gamemanager에서 전체 관리하므로 식물 그리기 제외
         # 식물이 있으면 그리기
-        if self.plant:
-            self.plant.draw(screen)
+        # if self.plant:
+        #    self.plant.draw(screen)
 
 
     def eventHandling(self, event):

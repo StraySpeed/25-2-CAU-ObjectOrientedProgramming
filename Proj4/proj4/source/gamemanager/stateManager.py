@@ -27,10 +27,9 @@ class StateManager:
         
         # 레벨 로드
         self.current_level_num = level # 재시작을 위해 레벨 저장
-        level_file = get_game_level(level)
         
         # 외부에서 받아온 GameManager를 사용하여 인스턴스 생성
-        self.game_manager = game_manager_class(screen_width, screen_height, level_file)
+        self.game_manager = game_manager_class(screen_width, screen_height, level)
         self.change_state(STATE_GAME)
 
     def restart_game(self, game_manager_class, width, height):

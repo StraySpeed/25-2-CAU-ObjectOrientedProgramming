@@ -60,7 +60,7 @@ class Application:
                         self.state_mgr.change_state(STATE_GAME)
 
                 # 추후 게임 내 마우스 클릭(식물 배치 등)
-                # self.state_mgr.game_manager.handle_input(event)
+                self.state_mgr.game_manager.handle_input(event)
 
     def _update(self, dt):
         """ 로직 업데이트 """

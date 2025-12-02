@@ -1,10 +1,11 @@
-import tile
+from . import tile
+from ..const import *
 
 class GameMap:
     def __init__(self, imageLoader, x = 0, y = 120, rows = 5, columns = 10, tileSize = 120):
         self.grid = []              # 맵 배열
-        self.rows = rows            # 세로 칸 개수
-        self.columns = columns      # 가로 칸 개수
+        self.rows = MAP_ROWS            # 세로 칸 개수
+        self.columns = MAP_COLUMNS      # 가로 칸 개수
         self.tileSize = tileSize    # size, 1280*720 기준 120*120
         
         # 타일 시작 위치 조정, 1280*720 기준 0, 120
