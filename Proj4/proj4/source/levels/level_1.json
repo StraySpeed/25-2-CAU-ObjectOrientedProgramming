@@ -1,0 +1,18 @@
+{
+    "background_type":0,
+    "init_sun_value":80,
+    "zombie_list":[
+        {"time":5000, "map_y":2, "name":"Zombie"}
+        {"time":12000, "map_y":1, "name":"Zombie"}
+        {"time":18000, "map_y":3, "name":"Zombie"}
+        {"time":25000, "map_y":2, "name":"Zombie"}
+        {"time":25000, "map_y":4, "name":"Zombie"}
+        {"time":36000, "map_y":1, "name":"Zombie"}
+        {"time":36000, "map_y":0, "name":"Zombie"}
+        {"time":52000, "map_y":3, "name":"Zombie"}
+        {"time":52000, "map_y":4, "name":"Zombie"}
+        {"time":63000, "map_y":1, "name":"Zombie"}
+        {"time":66000, "map_y":3, "name":"Zombie"}
+        {"time":70000, "map_y":4, "name":"Zombie"}
+    ]
+}
