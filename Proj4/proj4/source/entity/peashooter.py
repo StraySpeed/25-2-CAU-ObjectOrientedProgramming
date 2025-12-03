@@ -1,5 +1,6 @@
 import pygame
 from .entity import Entity
+from .bullet import Bullet
 # from ..const import * # 필요 시 import
 
 class Peashooter(Entity):
@@ -14,9 +15,12 @@ class Peashooter(Entity):
             attack_speed=1000, 
             move_speed=0
         )
-
-    def animate(self, dt):
-        # 애니메이션 로직 (추후 구현)
+    
+    def animate(self):
+        if self.isAttack():
+            self.image = pygame.image.load('assets/peashooter_attack.png').convert_alpha()
+        else:
+            self.image = pygame.image.load('assets/peashooter_idle.png').convert_alpha()    
         pass
 
         # 보류
@@ -72,3 +76,7 @@ class WallNut(Entity):
             attack_speed = 1000, 
             move_speed = 0
         )
+    def isAttack(self):
+        if self.attack():
+            return True
+        else: False
