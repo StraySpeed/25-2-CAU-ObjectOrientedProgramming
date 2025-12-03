@@ -12,6 +12,7 @@ class MapSystemManager:
     def __init__(self, screen_width, screen_height, stage_num: int):
         self.width = screen_width
         self.height = screen_height
+        self.stage_num = stage_num
 
         # 메뉴바 높이 계산 (전체 높이의 15%)
         self.menu_height = int(self.height * MENU_HEIGHT_RATIO)
@@ -107,12 +108,16 @@ class MapSystemManager:
         return self.zombie_loader.getSprite(index)
     
 
-    def process_events(self, event, plants_group):
+    def process_events(self, event, plants_group, current_sun):
         """
         이벤트 처리 및 식물 생성/제거 로직
+        
+        사용한 코스트를 반환
 
         :param event: Pygame 이벤트
         :param plants_group: GameManager의 식물 Sprite Group
+        :param current_sun: 현재 가지고 있는 돈
+        :return: 사용한 재화 수치
         """
         # 1. 메뉴바 이벤트 (식물 선택)
         self.menu_bar.eventHandling(event)
@@ -120,11 +125,23 @@ class MapSystemManager:
         # 2. 타일 이벤트 (식물이 선택된 상태일 때만)
         if self.menu_bar.selectedPlantIndex is not None:
             # game_map.eventHandling은 클릭된 Tile 객체를 반환합니다
-            clicked_tile = self.game_map.eventHandling(event)
-            
-            if clicked_tile:
-                self._handle_interaction(clicked_tile, plants_group)
 
+            clicked_tile = self.game_map.eventHandling(event)
+            plant_idx = self.menu_bar.selectedPlantIndex
+            cost = PLANT_COSTS.get(plant_idx, 0)
+
+            # 식물 심기 전 비용 체크
+            if current_sun >= cost:
+                if clicked_tile:
+                    # 설치 성공 시 비용 반환
+                    if self._handle_interaction(clicked_tile, plants_group):
+                        return cost
+            else:
+                # 돈 부족 시 선택 취소
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("[DEBUG] Not enough sun!")
+                    self.menu_bar.selectedPlantIndex = None
+        return 0
 
     def _handle_interaction(self, tile, plants_group):
         """
@@ -154,7 +171,12 @@ class MapSystemManager:
                 px, py = tile.rect.centerx, tile.rect.centery
                 
                 # 식물 객체 생성
-                new_plant = Peashooter(px, py, plant_img)
+                if idx == 0:
+                    new_plant = Peashooter(px, py, plant_img)
+                elif idx == 1:
+                    new_plant = SunFlower(px, py, plant_img)
+                elif idx == 2:
+                    new_plant = WallNut(px, py, plant_img)
                 
                 # 타일과 스프라이트 그룹 양쪽에 등록
                 tile.plant = new_plant
@@ -162,8 +184,10 @@ class MapSystemManager:
                 plants_group.add(new_plant)
                 
                 print(f"[DEBUG] 식물 {idx}번 설치 완료")
+                return True
             else:
                 print("[DEBUG] 이미 식물이 있습니다.")
+        return False
 
     def update(self):
         for row in self.game_map.grid:
@@ -188,6 +212,8 @@ class MapSystemManager:
             # 3. [After] 메뉴바 그리기 (가장 앞)
             if hasattr(self, 'map_manager'):
                 self.map_manager.menu_bar.draw(screen)
+
+            self.draw_sun_balance(screen)
                 
             return result
         return wrapper

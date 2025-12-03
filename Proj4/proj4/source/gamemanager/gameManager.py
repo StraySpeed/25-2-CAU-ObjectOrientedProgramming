@@ -3,8 +3,10 @@ from ..loader.levelLoader import LevelLoader
 from ..loader.imageLoader import ImageLoader
 from .stateManager import StateManager
 from .mapSystemManager import MapSystemManager
-from ..entity.basiczombie import BasicZombie 
+from ..entity.zombie import BasicZombie 
 from ..const import *
+from ..entity.bullet import Bullet
+from ..entity.sun import Sun
 
 class GameManager:
     def __init__(self, screen_width, screen_height, level):
@@ -25,7 +27,7 @@ class GameManager:
         self.last_zombie_spawn = pygame.time.get_ticks()
         
         self.last_sun_drop = pygame.time.get_ticks()
-        self.sun_drop_rate = 10000     # 10초마다 하늘에서 태양 떨어짐
+        self.sun_drop_rate = 5000
 
         # 레벨 데이터 로드
         level_file = get_game_level(level)
@@ -35,13 +37,40 @@ class GameManager:
         # 게임 시작 시간 기준점
         self.start_time = pygame.time.get_ticks()
 
+        self.sun_loader = ImageLoader(SUN_SPRITE)
+        self.sun_loader.resize(0, screen_width / MAP_ROWS * 0.5, screen_height / MAP_COLUMNS * 0.5)
+        self.sun_image = self.sun_loader.getSprite(0)
+
     def handle_input(self, event):
         """
         사용자 입력 처리
         """
-        # 맵/메뉴 관련 처리를 매니저에게 위임
-        # 식물이 생성되면 self.plants 그룹에 넣어야 하므로 그룹을 인자로 넘김
-        self.map_manager.process_events(event, self.plants)
+        # 태양에 대한 처리는 여기서 수행
+        # 맵/메뉴 처리는 mapSystem에서 수행
+        # 1. 태양 클릭 수집
+        # 겹쳐있는 태양 중 하나만 클릭되도록 break 사용
+        clicked_sun = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for sun in self.suns:
+                value = sun.handle_event(event)
+                if value > 0:
+                    self.sun_balance += value
+                    sun.kill() # 수집된 태양 제거
+                    print(f"[DEBUG] Sun collected! Balance: {self.sun_balance}")
+                    clicked_sun = True
+                    break # 한 번에 하나만 수집
+        
+        # 태양을 클릭하지 않았을 때만 맵 상호작용
+        if not clicked_sun:
+            # 2. 맵/메뉴 처리 (현재 잔고를 넘겨주고, 사용한 비용을 받아옴)
+            spent_sun = self.map_manager.process_events(event, self.plants, self.sun_balance)
+            
+            if spent_sun > 0:
+                self.sun_balance -= spent_sun
+                print(f"[DEBUG] Plant placed. Cost: {spent_sun}, Remaining: {self.sun_balance}")
+                # 설치 후 선택 해제 (PvZ 스타일)
+                self.map_manager.menu_bar.selectedPlantIndex = None
+
 
     def update(self, dt):
         """
@@ -57,6 +86,19 @@ class GameManager:
         self.manage_spawning()
 
         # 모든 객체 상태 업데이트 (이동, 애니메이션)
+        # 식물 업데이트 처리
+        for plant in self.plants:
+            # Peashooter는 attack, Sunflower는 obtain_sun
+            if hasattr(plant, 'obtain_sun'): 
+                new_sun = plant.obtain_sun()
+                if new_sun:
+                    self.suns.add(new_sun)
+            
+            # Peashooter 공격
+            if hasattr(plant, 'attack'):
+                bullet = plant.attack(self.zombies)
+                if isinstance(bullet, Bullet): self.bullets.add(bullet)
+
         self.plants.update(dt)
         self.zombies.update(dt)
         self.bullets.update(dt)
@@ -78,6 +120,12 @@ class GameManager:
         self.bullets.draw(surface)
         self.suns.draw(surface)
 
+    def draw_sun_balance(self, surface):
+        # 현재 자원(UI) 표시
+        font = pygame.font.Font(None, 36)
+        text = font.render(f"Sun: {self.sun_balance}", True, BLACK)
+        surface.blit(text, (self.screen_width - font.get_linesize() - 100, font.get_height() + 25)) # 메뉴바 근처에 표시
+
     def check_collisions(self):
         """
         충돌 처리 로직
@@ -86,7 +134,8 @@ class GameManager:
         hits = pygame.sprite.groupcollide(self.bullets, self.zombies, True, False)
         for bullet, hit_zombies in hits.items():
             for zombie in hit_zombies:
-                zombie.setDamage(20)
+                zombie.setDamage(bullet.strength)
+                bullet.kill()
 
         # 2. 좀비 vs 식물
         for zombie in self.zombies:
@@ -126,7 +175,8 @@ class GameManager:
         # 자연 태양 스폰
         if current_time - self.last_sun_drop > self.sun_drop_rate:
             self.last_sun_drop = current_time
-            # (미구현) 하늘에서 떨어지는 Sun 객체 생성
+            self.sun_balance += SUN_VALUE
+            print(f"[DEBUG] {SUN_VALUE} of Sun Dropped")
             pass
 
     def spawn_zombie_from_data(self, data):

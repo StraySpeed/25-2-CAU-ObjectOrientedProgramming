@@ -15,6 +15,7 @@ class BasicZombie(Entity):
         )
 
     def animate(self, plant):
+        return
         # 애니메이션 로직 구현 필요
         if self.isAttack(plant):
             self.image = pygame.image.load('assets/basiczombie_attack.png').convert_alpha()

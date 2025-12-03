@@ -124,6 +124,9 @@ PLANT_SPRITE_LIST = [
     SHOVEL
 ]
 
+BULLET_SPRITE = os.path.join(RESOURCE, "bullet", "bullet.png")
+BULLET_BROKEN_SPRITE = os.path.join(RESOURCE, "bullet", "broken_bullet.png")
+
 # ===============================
 # ZOMBIE SPRITE
 # ===============================
@@ -133,6 +136,18 @@ ZOMBIE_SPRITE_LIST = [
     ZOMBIE_BASIC,
     ZOMBIE_POWER
 ]
+
+# ===============================
+# SUN COST
+# ===============================
+SUN_SPRITE = os.path.join(RESOURCE, "character", "sun.png")
+SUN_VALUE = 25
+PLANT_COSTS = {
+    0: 100, # Peashooter
+    1: 50,  # Sunflower
+    2: 50,  # Wallnut
+    3: 0    # Shovel
+}
 
 def get_game_level(level):
     """

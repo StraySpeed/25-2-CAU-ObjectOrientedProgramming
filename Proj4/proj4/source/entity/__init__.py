@@ -1,2 +1,3 @@
-from .basiczombie import BasicZombie
-from .peashooter import Peashooter
+from .zombie import *
+from .plant import *
+from .sun import *
