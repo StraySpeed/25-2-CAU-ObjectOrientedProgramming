@@ -1,6 +1,7 @@
 import pygame
 from ..loader.levelLoader import LevelLoader
 from ..loader.imageLoader import ImageLoader
+from ..loader.fontLoader import FontLoader
 from .stateManager import StateManager
 from .mapSystemManager import MapSystemManager
 from ..entity.zombie import BasicZombie 
@@ -122,9 +123,12 @@ class GameManager:
 
     def draw_sun_balance(self, surface):
         # 현재 자원(UI) 표시
-        font = pygame.font.Font(None, 36)
+        font = FontLoader.load_font(int(self.screen_height * MENU_HEIGHT_RATIO * 0.4))
+        margin = int(self.map_manager.menu_height * 0.1)
         text = font.render(f"Sun: {self.sun_balance}", True, BLACK)
-        surface.blit(text, (self.screen_width - font.get_linesize() - 100, font.get_height() + 25)) # 메뉴바 근처에 표시
+        text_rect = text.get_rect()
+        text_rect.topright = (self.screen_width - margin, margin)
+        surface.blit(text, text_rect) # 메뉴바 근처에 표시
 
     def check_collisions(self):
         """
