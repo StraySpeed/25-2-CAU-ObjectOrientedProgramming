@@ -13,9 +13,9 @@ class BasicZombie(Entity):
             move_speed=50
         )
 
-    def animate(self):
+    def animate(self, plant):
         # 애니메이션 로직 구현 필요
-        if self.isAttack():
+        if self.isAttack(plant):
             self.image = pygame.image.load('assets/basiczombie_attack.png').convert_alpha()
         else:
             self.image = pygame.image.load('assets/basiczombie_walk.png').convert_alpha()
@@ -33,8 +33,8 @@ class BasicZombie(Entity):
             return True
         return False
     
-    def isAttack(self):
-        if self.attack():
+    def isAttack(self, plant):
+        if self.attack(plant):
             return True
         else: False
 
@@ -53,25 +53,14 @@ class StrongZombie(Entity):
         )
        
 
-    def animate(self, dt):
-        # 구현 필요함
-        self.frame_time += dt
-        if self.frame_time >= self.frame_duration:
-            self.frame_time = 0
-            if self.state == 'dying':
-                if(self.current_frame_index <= len(self.animation_frames['dying']) -1):
-                    self.current_frame_index += 1
-            else: self.current_frame_index = (self.current_frame_index + 1) % len(self.animation_frames[self.state])
-
-        if self.state == 'dying':
-            self.image = self.animation_frames['dying'][self.current_frame_index]
-        elif self.state == 'walking':
-            self.image = self.animation_frames['walking'][self.current_frame_index]
-        elif self.state == 'attacking':
-            self.image = self.animation_frames['attacking'][self.current_frame_index]
-            #self.attack()
+    def animate(self, plant):
+        # 애니메이션 로직 구현 필요
+        if self.isAttack(plant):
+            self.image = pygame.image.load('assets/basiczombie_attack.png').convert_alpha()
+        else:
+            self.image = pygame.image.load('assets/basiczombie_walk.png').convert_alpha()
         pass
-   
+
     def attack(self, plant):
         now = pygame.time.get_ticks()
         # 공격 쿨타임 및 거리 체크
@@ -80,6 +69,11 @@ class StrongZombie(Entity):
              # Entity 클래스에 정의된 setDamage 사용
             if hasattr(plant, 'setDamage'):
                 plant.setDamage(self.strength) 
-                print(f"[DEBUG] Basiczombie({self.name}) attacks plant({plant.name})! Damage: {self.strength}")
+                print(f"[DEBUG] Strongzombie({self.name}) attacks plant({plant.name})! Damage: {self.strength}")
             return True
         return False
+    
+    def isAttack(self, plant):
+        if self.attack(plant):
+            return True
+        else: False
