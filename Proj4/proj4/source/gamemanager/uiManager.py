@@ -176,13 +176,13 @@ class UIManager:
         def start_lvl(n):
             return lambda: self.state_mgr.start_game(n, GameManager, self.width, self.height)
 
-        # 레벨 버튼) 너비 25%, 높이 10%로 설정
+        # 레벨 버튼) 너비 20%, 높이 10%로 설정
         # y위치를 40%, 55%, 70% ... 로 배치
-        btn_w, btn_h = 0.25, 0.1
+        btn_w, btn_h = 0.20, 0.1
         
-        rect_l1 = self.calc_center_rect(0.20, 0.55, btn_w, btn_h)
-        rect_l2 = self.calc_center_rect(0.5, 0.55, btn_w, btn_h)
-        rect_l3 = self.calc_center_rect(0.80, 0.55, btn_w, btn_h)
+        rect_l1 = self.calc_center_rect(0.19, 0.5, btn_w, btn_h)
+        rect_l2 = self.calc_center_rect(0.5, 0.5, btn_w, btn_h)
+        rect_l3 = self.calc_center_rect(0.81, 0.5, btn_w, btn_h)
         rect_back = self.calc_center_rect(0.5, 0.95, btn_w, btn_h)
 
         self.level_buttons = [
