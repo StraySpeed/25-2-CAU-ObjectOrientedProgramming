@@ -40,10 +40,10 @@ BUTTON_COLOR = (150, 150, 150)
 # Level
 # ===============================
 MAIN_BACKGROUND_IMAGE = os.path.join(RESOURCE, "interface", "mainmenu.png")
-SELECT_LEVEL_BACKGROUND_IMAGE = os.path.join(RESOURCE, "interface", "selectmenu.png")
-LEVEL1_BACKGROUND_IMAGE = TEST_IMAGE
-LEVEL2_BACKGROUND_IMAGE = TEST_IMAGE
-LEVEL3_BACKGROUND_IMAGE = TEST_IMAGE
+SELECT_LEVEL_BACKGROUND_IMAGE = os.path.join(RESOURCE, "map", "levelChoose_background.png")
+LEVEL1_BACKGROUND_IMAGE = os.path.join(RESOURCE, "map", "level1_other.png")
+LEVEL2_BACKGROUND_IMAGE = os.path.join(RESOURCE, "map", "level2_other.png")
+LEVEL3_BACKGROUND_IMAGE = os.path.join(RESOURCE, "map", "level3_other.png")
 
 VICTORY_OVERLAY = os.path.join(RESOURCE, "interface", "victory.png")
 DEFEAT_OVERLAY = os.path.join(RESOURCE, "interface", "defeat.png")
@@ -73,36 +73,36 @@ STATE_GAME_CLEAR = "GAME_CLEAR"
 # ===============================
 # TILE SPRITE
 # ===============================
-TILE_DEFAULT = os.path.join(RESOURCE, "map", "map_default.png")
-TILE_CLICKED = os.path.join(RESOURCE, "map", "map_hover.png")
-TILE_HOVER = os.path.join(RESOURCE, "map", "map_hover.png")
+TILE_DEFAULT = os.path.join(RESOURCE, "map", "map_default_1.png")
+TILE_CLICKED = os.path.join(RESOURCE, "map", "map_hover_1.png")
+TILE_HOVER = os.path.join(RESOURCE, "map", "map_hover_1.png")
 
 # 아래는 테스트 에셋
 TILE_DEFAULT_1 = os.path.join(ASSET, "sprite", "tile_default_1.png")
 TILE_DEFAULT_2 = os.path.join(ASSET, "sprite", "tile_default_2.png")
 TILE_DEFAULT_3 = os.path.join(ASSET, "sprite", "tile_default_3.png")
 TILE_DEFAULT_LIST = [
-    TILE_DEFAULT_1,
-    TILE_DEFAULT_2,
-    TILE_DEFAULT_3
+    TILE_DEFAULT,
+    TILE_DEFAULT,
+    TILE_DEFAULT
     ]
 
 TILE_CLICKED_1 = os.path.join(ASSET, "sprite", "tile_clicked_1.png")
 TILE_CLICKED_2 = os.path.join(ASSET, "sprite", "tile_clicked_2.png")
 TILE_CLICKED_3 = os.path.join(ASSET, "sprite", "tile_clicked_3.png")
 TILE_CLICKED_LIST = [
-    TILE_CLICKED_1,
-    TILE_CLICKED_2,
-    TILE_CLICKED_3
+    TILE_CLICKED,
+    TILE_CLICKED,
+    TILE_CLICKED
     ]
 
 TILE_HOVER_1 = os.path.join(ASSET, "sprite", "tile_hover_1.png")
 TILE_HOVER_2 = os.path.join(ASSET, "sprite", "tile_hover_2.png")
 TILE_HOVER_3 = os.path.join(ASSET, "sprite", "tile_hover_3.png")
 TILE_HOVER_LIST = [
-    TILE_HOVER_1,
-    TILE_HOVER_2,
-    TILE_HOVER_3
+    TILE_HOVER,
+    TILE_HOVER,
+    TILE_HOVER
     ]
 
 # ===============================
